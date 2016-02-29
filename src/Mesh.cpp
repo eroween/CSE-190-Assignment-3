@@ -12,13 +12,125 @@ Mesh::Mesh(std::string filename)
     numOfInputVertices  = 0;
     loadObject(filename);
     initMesh();
+    //test();
 }
 
 
 Mesh::~Mesh()
 {
-    // Delete
 	 DEBUG_PRINT("TODO\n");
+}
+
+// I'd like to put this into the test.hpp file, and have a testing tool code
+void Mesh::test()
+{
+#if 0
+    // Print all edges information
+    // Edge Id  - (out, in) - face
+    printf("halfedgeID\t (out,in)\t Face ID\t Twinedge\t (out,in)\t Face Id\n");
+    for(std::vector<HalfEdge*>::iterator it = hEdgeBuffer.begin(); it != hEdgeBuffer.end(); ++it)
+    {
+        HalfEdge * t = (*it)->getTwin();
+        printf("%d\t\t\t (%d,%d)\t\t\t %d\t\t\t", (*it)->id, (*it)->getStartVertex()->id,(*it)->getEndVertex()->id, (*it)->getFace()->id);
+        if(t == NULL)
+        {
+             printf("%d\t\t (%d,%d)\t\t %d\n", -1, 1,1, -1);
+        }
+        else
+        {
+             printf("%d\t\t (%d,%d)\t\t %d\n", (t)->id, (t)->getStartVertex()->id,(t)->getEndVertex()->id, (t)->getFace()->id);
+        }
+    }
+#endif
+#if 0
+    
+    // Print all faces round a face
+    // Test with face 0 and face 12 (12 is on boundary)
+    Face *f0  = NULL;
+    Face *f13 = NULL;;
+    for(std::vector<Face*>::iterator it = inputFaces.begin(); it != inputFaces.end(); ++it)
+    {
+        if((*it)->id == 0)
+            f0 = (*it);
+        if((*it)->id == 13)
+            f13 = (*it);
+    }
+    std::vector<Face*> faces0 = findFacesAroundFace(f0);
+    std::vector<Face*> faces13= findFacesAroundFace(f13);
+    printf("\nFaces around face 0 :");
+    for(std::vector<Face*>::iterator it=faces0.begin(); it!=faces0.end(); ++it)
+    {
+        printf("%d, ",(*it)->id);
+    }
+    printf("\nFaces around face 13 :");
+    for(std::vector<Face*>::iterator it=faces13.begin(); it!=faces13.end(); ++it)
+    {
+        printf("%d, ",(*it)->id);
+    }
+    printf("\n");
+    
+#endif
+#if 0
+    //print all edges entering a vertex.
+    Vertex *v0 = NULL;
+    for(std::vector<Vertex*>::iterator it=inputVertex.begin(); it!=inputVertex.end(); ++it)
+    {
+        if((*it)->id == 0)
+            v0 = (*it);
+    }
+    std::vector<HalfEdge*>in = findEdgesEnteringVertex(v0);
+    printf("Vertex Entering v0 : ");
+    for(std::vector<HalfEdge*>::iterator it=in.begin(); it!=in.end(); ++it)
+    {
+        printf("(%d,%d)",(*it)->getStartVertex()->id, (*it)->getEndVertex()->id);
+    }
+    printf("\n");
+#endif
+#if 0
+    //print all edges leaving a vertex.
+    Vertex *vv0 = NULL;
+    for(std::vector<Vertex*>::iterator it=inputVertex.begin(); it!=inputVertex.end(); ++it)
+    {
+        if((*it)->id == 0)
+            vv0 = (*it);
+    }
+    std::vector<HalfEdge*>out = findEdgesLeavingVertex(vv0);
+    printf("Vertex Leaving v0 : ");
+    for(std::vector<HalfEdge*>::iterator it=out.begin(); it!=out.end(); ++it)
+    {
+        printf("(%d,%d)",(*it)->getStartVertex()->id, (*it)->getEndVertex()->id);
+    }
+    printf("\n");
+#endif
+#if 1
+    //Find all faces around a vertex
+    Vertex *vvv0 = NULL;
+    Vertex *vvv11 = NULL;
+    for(std::vector<Vertex*>::iterator it=inputVertex.begin(); it!=inputVertex.end(); ++it)
+    {
+        if((*it)->id == 0)
+            vvv0 = (*it);
+        if((*it)->id == 11)
+            vvv11 = (*it);
+    }
+    std::vector<Face*>facesvvv0 = findFacesAroundVertex(vvv0);
+    //TODO
+    //Finding faces on boundary fails -> infinite loop
+    std::vector<Face*>facesvvv11 = findFacesAroundVertex(vvv11);
+    
+    
+    printf("\nFaces around Vertex 0 :");
+    for(std::vector<Face*>::iterator it=facesvvv0.begin(); it!=facesvvv0.end(); ++it)
+    {
+        printf("%d, ",(*it)->id);
+    }
+    printf("\nFaces around Vertex 11 :");
+    for(std::vector<Face*>::iterator it=facesvvv11.begin(); it!=facesvvv11.end(); ++it)
+    {
+        printf("%d, ",(*it)->id);
+    }
+    printf("\n");
+#endif
 }
 
 double * Mesh::getVertexData()
@@ -56,14 +168,6 @@ std::vector<Face*> Mesh::findFacesAroundFace(Face *f)
         if(edge->getTwin() != NULL)
             faces.push_back(edge->getTwin()->getFace());
     }while(edge != e0);
-#if DEBUG
-    printf("Neigbors of %d : ", f->id);
-    for(std::vector<Face*>::iterator it = faces.begin(); it != faces.end(); ++it)
-    {
-        printf("%d  ",(*it)->id);
-    }
-    printf("\n");
-#endif
     return faces;
 }
 
@@ -71,7 +175,7 @@ std::vector<Face*> Mesh::findFacesAroundVertex(Vertex *v)
 {
     std::vector<HalfEdge*> edges;
     std::vector<Face*> faces;
-    edges = findEdgesIN(v);
+    edges = findEdgesEnteringVertex(v);
     for(std::vector<HalfEdge*>::iterator it = edges.begin(); it != edges.end(); ++it)
     {
         Face *f = (*it)->getFace();
@@ -82,7 +186,7 @@ std::vector<Face*> Mesh::findFacesAroundVertex(Vertex *v)
     return faces;
 }
 
-std::vector<HalfEdge*> Mesh::findEdgesIN(Vertex *v)
+std::vector<HalfEdge*> Mesh::findEdgesEnteringVertex(Vertex *v)
 {
     std::vector<HalfEdge*> edges;
     HalfEdge *e0    = v->getHalfEdge();
@@ -99,23 +203,14 @@ std::vector<HalfEdge*> Mesh::findEdgesIN(Vertex *v)
             }
         }
     }while(edge != e0);
-#if DEBUG
-    printf("Vertex i -> %d : ", v->id);
-    for(std::vector<HalfEdge*>::iterator it = edges.begin(); it != edges.end(); ++it)
-    {
-        printf("(%d->%d f:%d),",(*it)->getOutVertex()->id, (*it)->getInVertex()->id,(*it)->getFace()->id);
-    }
-    printf("\n");
-#endif
     return edges;
 }
 
-std::vector<HalfEdge*> Mesh::findEdgesOUT(Vertex *v)
+std::vector<HalfEdge*> Mesh::findEdgesLeavingVertex(Vertex *v)
 {
     std::vector<HalfEdge*> edges;
     HalfEdge *e0    = v->getHalfEdge();
     HalfEdge *edge  = e0;
-    int i = 0;
     do
     {
         if(edge->getNext() != NULL)
@@ -126,14 +221,7 @@ std::vector<HalfEdge*> Mesh::findEdgesOUT(Vertex *v)
         if(edge->getTwin() != NULL)
         edge = edge->getTwin();
     }while(edge != e0);
-#if DEBUG
-    printf("Vertex %d -> i : ", v->id);
-    for(std::vector<HalfEdge*>::iterator it = edges.begin(); it != edges.end(); ++it)
-    {
-        printf("(%d->%d,f:%d),",(*it)->getOutVertex()->id, (*it)->getInVertex()->id, (*it)->getFace()->id);
-    }
-    printf("\n");
-#endif
+
     return edges;
 }
 
@@ -216,7 +304,7 @@ void Mesh::loadObject(const std::string filename)
     std::cout << "Done parsing." << std::endl;
 }
 
-void Mesh::createHalfEdgeConnections(HalfEdge *e0, HalfEdge *e1, HalfEdge *e2)
+void Mesh::buildHalfEdgeConnections(HalfEdge *e0, HalfEdge *e1, HalfEdge *e2)
 {
     e0->setPrev(e2);
     e0->setNext(e1);
@@ -285,8 +373,8 @@ void Mesh::initMesh()
         
         
         v[0] = inputVertex[faces[0]];
-        v[1] = inputVertex[faces[0]];
-        v[2] = inputVertex[faces[0]];
+        v[1] = inputVertex[faces[1]];
+        v[2] = inputVertex[faces[2]];
         
         // Calculate face normals
         (*it)->setVertexes(*v[0],*v[1],*v[2]);
@@ -315,7 +403,7 @@ void Mesh::initMesh()
         hEdgeBuffer.push_back(e1);
         hEdgeBuffer.push_back(e2);
         
-        createHalfEdgeConnections(e0,e1,e2);
+        buildHalfEdgeConnections(e0,e1,e2);
      
         createData(i,(*it));
         i += 3;

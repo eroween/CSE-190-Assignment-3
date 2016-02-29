@@ -12,8 +12,8 @@
 HalfEdge::HalfEdge(Face *f, Vertex *inVer, Vertex *outVer)
 {
     face    = f;
-    start   = inVer;
-    end     = outVer;
+    end     = inVer;
+    start   = outVer;
     next    = NULL;
     prev    = NULL;
     twin    = NULL;
@@ -41,14 +41,14 @@ void HalfEdge::setTwin(HalfEdge * t)
     twin = t;
 }
 
-void HalfEdge::setEndVertex(Vertex *o)
+void HalfEdge::setEndVertex(Vertex *e)
 {
-    end = o;
+    end = e;
 }
 
-void HalfEdge::setStartVertex(Vertex *i)
+void HalfEdge::setStartVertex(Vertex *s)
 {
-    start = i;
+    start = s;
 }
 
 void HalfEdge::setFace(Face *f)

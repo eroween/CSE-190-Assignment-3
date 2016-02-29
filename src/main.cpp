@@ -11,7 +11,7 @@
 #include "Mesh.hpp"
 #include "HalfEdge.hpp"
 #include "Vertex.hpp"
-
+#include "test.hpp"
 
 GLuint	vboHandle[1];	// a VBO that contains interleaved positions and colors
 GLuint programObject;

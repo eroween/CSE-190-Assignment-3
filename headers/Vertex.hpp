@@ -1,7 +1,7 @@
 //
 // Vertex.hpp
 //
-// Created by Camel 2/15/2016
+// Created by Cristian Troncoso 2/15/2016
 //
 
 #ifndef Vertex_hpp
@@ -35,7 +35,8 @@ private:
     
 public:
     /*!
-     * \Brief   : Constructor, instantiates using Vetex's position.
+     * \Brief   : Constructor, instantiates using Vetex's position, some default color
+     *            and normal (0,0,0,1).
      */
     Data(Vector3D p)
     {
@@ -74,8 +75,16 @@ public:
         normal[2] = n[2];
         normal[3] = 1;
     }
+    
     /*!
-     * \Brief   : Returns the position vector, used by VErtex class.
+     * \Brief   : Set the Vertex's normal
+     */
+    void setNormal(Vector4D n)
+    {
+        normal = Vector4D(n);
+    }
+    /*!
+     * \Brief   : Returns the vector's position,used by Vertex class.
      */
     Vector4D getPosition()
     {
@@ -126,22 +135,39 @@ public:
      */
     ~Vertex(){}
     
+    /*!
+     * \Brief   : Set the normal vector on each Vertex.
+     */
+    void setNormal(Vector4D n)
+    {
+        data->setNormal(n);
+    }
+    /*!
+     * \Brief   : Return the (x,y,z) position of a Vertex in space.
+     */
     Vector3D getPosition()
     {
         Vector4D position(data->getPosition());
         return position.toVector3D();
     }
-
+    /*!
+     * \Brief   : Returns all Vetex data; position, color and normal. Ready to 
+     *            be loaded onto GPU.
+     */
     Data* getOuputData()
     {
         return data;
     }
-    
+    /*!
+     * \Brief   : Set the associated half-edge
+     */
     void setHalfEdge(HalfEdge* he)
     {
         halfedge = he;
     }
-    
+    /*
+     * \Brief   : Return the associated half-edge.
+     */
     HalfEdge *getHalfEdge()
     {
         return halfedge;

@@ -27,6 +27,10 @@ public:
     int faceVertexes[3];                        /**< Vertex index according to the input file */
     
     /*!
+     * \Brief   : Constructor, default.
+     */
+    Face(){}
+    /*!
      * \Brief   : Constructor,Initializes a Face bases on Vertex index (from input file) and color.
      */
     Face (int *fVertexes, Vector4D inColor)
