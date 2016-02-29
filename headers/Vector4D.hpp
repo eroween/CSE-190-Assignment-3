@@ -26,7 +26,7 @@ public:
      */
     Vector4D(double x, double y, double z, double w) : x( x ), y( y ), z( z ), w(w) { }
     /*!
-     * \Brief   : Constructor, Initializes to vector (d,d,d,w).
+     * \Brief   : Constructor, Initializes to vector (d,d,d,d).
      */
     Vector4D( double d ) : x( d ), y( d ), z( d ), w(d) { }
     /*!
@@ -46,7 +46,7 @@ public:
         return (float*)(&x);
     }
     /*!
-     * \Brief   : Return a reference to the data of the vector.
+     * \Brief   : Return a reference to the Vector data.
      */
     double* xyz()
     {
@@ -54,7 +54,7 @@ public:
         return &data[0];
     }
     /*!
-     * \Brief   : Set a value at a specific location in a Vector.
+     * \Brief   : Set a value at a specific index location.
      */
     void set(int index, double value)
     {
@@ -119,28 +119,28 @@ public:
         return Vector4D( rc * x, rc * y, rc * z, rc * w );
     }
     /*!
-     * \Brief   : addition / assignment
+     * \Brief   : Addition / assignment
      */
     inline void operator+=( const Vector4D& v )
     {
         x += v.x; y += v.y; z += v.z; w += v.w;
     }
     /*!
-     * \Brief   : subtraction / assignment.
+     * \Brief   : Subtraction / assignment.
      */
     inline void operator-=( const Vector4D& v )
     {
         x -= v.x; y -= v.y; z -= v.z; w -=v.w;
     }
     /*!
-     * \Brief   : scalar multiplication / assignment.
+     * \Brief   : Scalar multiplication / assignment.
      */
     inline void operator*=( const double& c )
     {
         x *= c; y *= c; z *= c; w *= c;
     }
     /*!
-     * \Brief   : scalar division / assignment.
+     * \Brief   : Scalar division / assignment.
      */
     inline void operator/=( const double& c )
     {

@@ -16,7 +16,7 @@
 class Matrix4
 {
 private:
-    float data[16];
+    double data[16];
     
 public:
     /*!
@@ -33,7 +33,7 @@ public:
     /*!
      * \Brief    : Constructor, Initializes the matrix to a constant.
      */
-    Matrix4(float c)
+    Matrix4(double c)
     {
         for(int i = 0; i < 4; i++)
         {
@@ -52,7 +52,7 @@ public:
         {
             for(int j = 0; j < 4; j++)
             {
-                data[i * 4 + j] = data[i * 4 + j];
+                data[i * 4 + j] = m.data[i * 4 + j];
             }
         }
     }
@@ -61,9 +61,9 @@ public:
      */
     ~Matrix4(){}
     /*!
-    * \Brief    : Return the raw data of this matrix.
+    * \Brief    : Returns the data of this matrix.
     */
-    float* get(int vector,int element)
+    double* get(int vector,int element)
     {
        return data;
     }
@@ -110,7 +110,7 @@ public:
         return ret;
     }
     /*!
-     *\Brief     : scalar multiplication.
+     *\Brief     : Scalar multiplication.
      */
     inline Matrix4 operator*( const double& c ) const
     {
@@ -137,17 +137,17 @@ public:
     /*!
      * \Brief   : Vector4D matrix multiplication.
      */
-    inline Vector4D operator*(const Vector4D& a) const
+    inline Vector4D operator*(const Vector4D& v) const
     {
-        Vector4D b;
+        Vector4D ret;
         for(int i = 0; i < 4; i++)
         {
             for(int j = 0; j < 4; j++)
             {
-                b[i] += data[j * 4 + i] * a[j];
+                ret[i] += v[j] * data[j * 4 + i];
             }
         }
-        return b;
+        return ret;
     }
 
     /*!
@@ -156,11 +156,11 @@ public:
     Matrix4 transpose(void)
     {
        Matrix4 transpose;
-       for(int x = 0; x < 4; ++x)
+       for(int i = 0; i < 4; ++i)
        {
-          for(int y = 0; y < 4; ++y)
+          for(int j = 0; j < 4; ++j)
           {
-             transpose.data[x*4+y] = data[y*4+x];
+             transpose.data[j*4+i] = data[i*4+j];
           }
        }
        return transpose;
@@ -171,18 +171,19 @@ public:
     Matrix4 inverse(void)
     {
         Matrix4 b;
-        
+        //TODO
         //Calculate the inverse of this matrix
         
         return b;
     }
     /*!
-     * \Brief   : Calculate the inverse of this matrix with the assumption that it is ortho-normal.
+     * \Brief   : Calculates the inverse of this matrix with the assumption that it is ortho-normal.
      */
     Matrix4 orthoNormalInverse(void)
     {
         Matrix4 b;
         //This will be useful when implementing cameras!
+        //TODO
         return b;
     }
     /*!

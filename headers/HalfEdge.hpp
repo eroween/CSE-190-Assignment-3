@@ -26,7 +26,7 @@ class Vertex;
 
 
 /*!
- * \brief   Half edge data structure is used in the Mesh editor class.
+ * \brief   Half-edge data structure is used in the Mesh editor class.
  *          It allows faces, vertexs, and edge's look up in O(1) time.
  *          When parsing the faces buffer, three half edges will be 
  *          created per each face.

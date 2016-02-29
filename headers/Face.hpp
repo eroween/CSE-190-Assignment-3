@@ -9,7 +9,7 @@
 #include "Vertex.hpp"
 
 /*!
- * \brief   Containds all model's faces information
+ * \brief   Contains all model's faces information.
  */
 class Face
 {
@@ -23,7 +23,7 @@ protected:
     
     
 public:
-    int id;                                     /**< The id is the input order according to the input file */
+    int id;                                     /**< The id is the input order according to the input file (.OFF or .OBJ) */
     int faceVertexes[3];                        /**< Vertex index according to the input file */
     
     /*!
@@ -31,14 +31,14 @@ public:
      */
     Face(){}
     /*!
-     * \Brief   : Constructor,Initializes a Face bases on Vertex index (from input file) and color.
+     * \Brief   : Constructor,Initializes a Face based on Vertex index (from input file) and color.
      */
     Face (int *fVertexes, Vector4D inColor)
     {
         faceVertexes[0] = fVertexes[0];
         faceVertexes[1] = fVertexes[1];
         faceVertexes[2] = fVertexes[2];
-        color = Vector4D(inColor);
+        color           = Vector4D(inColor);
     }
     /*!
      * \Brief   : Constructor, Initializes using position, normal and color.
@@ -49,8 +49,8 @@ public:
         vertexes[1] = vertices[1];
         vertexes[2] = vertices[2];
         
-        normal = Vector3D(normal);
-        color = Vector4D(color);
+        normal      = Vector3D(normal);
+        color       = Vector4D(color);
     }
     /*!
      * \Brief   : Constructor, Initializes using position and normal.
@@ -60,7 +60,7 @@ public:
         vertexes[0] = vertices[0];
         vertexes[1] = vertices[1];
         vertexes[2] = vertices[2];
-        normal = Vector3D(normal);
+        normal      = Vector3D(normal);
     }
     /*!
      * \Brief   : Constructor, Initialize using position.
@@ -70,15 +70,16 @@ public:
         vertexes[0] = vertices[0];
         vertexes[1] = vertices[1];
         vertexes[2] = vertices[2];
-        
-        normal = Vector3D(0);
+        color       = Vector4D(0.5,0.5,0.5,1);
+        normal      = Vector3D(0);
     }
     /*!
      * \Brief   : Destructor.
      */
     ~Face(){}
     /*!
-     * \Brief   : Instantiates the Vertexes class in this Face
+     * \Brief   : Sets the face's Vertexes (3) based on input information
+	  *			   From input file.
      */
     void setVertexes(Vertex A, Vertex B, Vertex C)
     {
@@ -95,6 +96,8 @@ public:
         Vector3D AC = vertexes[2].getPosition() - vertexes[0].getPosition();
         
         normal = normal.cross(AB,AC);
+
+		  //TODO : Normalize.
         //normal = normal->normalize();
     }
     /*!
@@ -136,7 +139,7 @@ public:
         return halfEdge;
     }
     /*!
-     * \Brief   : Check if this edge is in the boundary of the Mesh (Manifold checking)
+     * \Brief   : Checks if this edge is in the boundary of the Mesh (Manifold checking)
      */
     bool isBoundary()
     {
@@ -155,4 +158,4 @@ public:
     
 };
 
-#endif
+#endif// End Face_hpp

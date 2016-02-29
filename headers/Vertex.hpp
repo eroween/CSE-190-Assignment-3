@@ -23,7 +23,7 @@
 class HalfEdge;
 
 /*!
- * \brief   Data class helps to organize the Vertexe data that needs
+ * \brief   Data class helps to organize the Vertex data that needs
  *          to be loaded onto the GPU.
  */
 class Data
@@ -93,7 +93,7 @@ public:
 }; //End Class Data
 
 /*!
- * \brief   Containds all model's vertex information
+ * \brief   Class Vertex stores all information of model's vertexes.
  */
 class Vertex
 {
@@ -112,7 +112,6 @@ public:
      */
     Vertex(Vector3D position)
     {
-        Vector3D color = Vector3D(0.5,0.5,0.5);
         data = new Data(position);
     }
     /*!
@@ -175,5 +174,5 @@ public:
     
 };
 
-#endif
+#endif //End Vertex_hpp
 

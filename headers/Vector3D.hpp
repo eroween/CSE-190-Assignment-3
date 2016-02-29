@@ -30,7 +30,7 @@ public:
      */
     Vector3D( double d ) : x( d ), y( d ), z( d ) { }
     /*!
-     * \Brief   : Constructor, Initializes  from another Vector3D.
+     * \Brief   : Constructor, Initializes from another Vector3D.
      */
     Vector3D( const Vector3D& v ) : x( v.x ), y( v.y ), z( v.z ) { }
     /*!
@@ -54,14 +54,14 @@ public:
         return &data[0];
     }
     /*! 
-     * \Brief   : Set a value at a specific location in a Vector.
+     * \Brief   : Set a value at a specific index in a Vector.
      */
     void set(int index, double value)
     {
         (&x) [index] = value;
     }
     /*!
-     * \Brief   : Return a reference to a specified location.
+     * \Brief   : Return a reference to a specified index (location).
      */
     inline double& operator [] (const int& loc)
     {
@@ -183,14 +183,14 @@ public:
     //    return Vector4D(x, y, z, w);
     //}
     /*!
-    * \Brief    : dot product.
+    * \Brief    : Dot product.
     */
     inline double dot( const Vector3D& u, const Vector3D& v )
     {
         return u.x*v.x + u.y*v.y + u.z*v.z ;
     }
     /*!
-    * \Brief    : cross product.
+    * \Brief    : Cross product.
     */
     inline Vector3D cross( const Vector3D& u, const Vector3D& v )
     {
