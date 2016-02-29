@@ -36,9 +36,7 @@ void InitVBO()
 {
     glGenBuffers(1, vboHandle);   // create an interleaved VBO object
     glBindBuffer(GL_ARRAY_BUFFER, vboHandle[0]);   // bind the first handle
-    
-    int num = mesh->getNunOfVertices();
-    GLdouble *temp = (GLdouble*)mesh->getVertexData();
+
     glBufferData(GL_ARRAY_BUFFER, sizeof(Data)*(mesh->getNunOfVertices()), (GLdouble*)(mesh->getVertexData()), GL_STATIC_DRAW);
     
     
@@ -82,9 +80,9 @@ void display()
      */
     //glBindBuffer(GL_ARRAY_BUFFER, vboHandle[0]);
     //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVBO);
-    // Tells OpenGL how to walk through the VBOs, i.e., how the data are packed
-    // number of coordinates per vertex (4 here), type of the coordinates,
-    // stride between consecutive vertices, and pointers to the first coordinate
+    //Tells OpenGL how to walk through the VBOs, i.e., how the data are packed
+    //number of coordinates per vertex (4 here), type of the coordinates,
+    //stride between consecutive vertices, and pointers to the first coordinate
     
     
     GLint viewLoc = glGetUniformLocation(programObject, "view");

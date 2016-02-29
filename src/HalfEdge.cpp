@@ -2,8 +2,8 @@
 // HalfEdge.cpp
 // Mesh_Editor_Xcode
 //
-// Created by Camel on 2/12/2016
-// Copyright @ 2016 Camel. All rights reserved
+// Created by Cristian Troncoso on 2/12/2016
+// Copyright @ 2016 Cristian Troncoso. All rights reserved
 //
 
 #include "HalfEdge.hpp"
@@ -12,8 +12,8 @@
 HalfEdge::HalfEdge(Face *f, Vertex *inVer, Vertex *outVer)
 {
     face    = f;
-    in      = inVer;
-    out     = outVer;
+    start   = inVer;
+    end     = outVer;
     next    = NULL;
     prev    = NULL;
     twin    = NULL;
@@ -36,19 +36,19 @@ void HalfEdge::setPrev(HalfEdge * p)
     prev = p;
 }
 
-void HalfEdge::setTwin(HalfEdge * o)
+void HalfEdge::setTwin(HalfEdge * t)
 {
-    twin = o;
+    twin = t;
 }
 
-void HalfEdge::setOutVertex(Vertex *o)
+void HalfEdge::setEndVertex(Vertex *o)
 {
-    out = o;
+    end = o;
 }
 
-void HalfEdge::setInVertex(Vertex *i)
+void HalfEdge::setStartVertex(Vertex *i)
 {
-    in = i;
+    start = i;
 }
 
 void HalfEdge::setFace(Face *f)
@@ -71,14 +71,14 @@ HalfEdge * HalfEdge::getTwin()
     return twin;
 }
 
-Vertex * HalfEdge::getInVertex()
+Vertex * HalfEdge::getStartVertex()
 {
-    return in;
+    return start;
 }
 
-Vertex * HalfEdge::getOutVertex()
+Vertex * HalfEdge::getEndVertex()
 {
-    return out;
+    return end;
 }
 
 Face * HalfEdge::getFace()

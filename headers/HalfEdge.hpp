@@ -39,25 +39,25 @@ private:
     HalfEdge * next;
     HalfEdge * twin;
     Face     * face;
-    Vertex   * in;
-    Vertex   * out;
+    Vertex   * start;
+    Vertex   * end;
   
 public:
     int id;
-    HalfEdge(Face * f, Vertex * inVer, Vertex * outVer);
+    HalfEdge(Face * f, Vertex * startVer, Vertex * endVer);
     ~HalfEdge();
     void setNext(HalfEdge * next);
     void setPrev(HalfEdge * prev);
     void setTwin(HalfEdge * opps);
-    void setOutVertex(Vertex *o);
-    void setInVertex(Vertex *i);
+    void setEndVertex(Vertex *o);
+    void setStartVertex(Vertex *i);
     void setFace(Face *f);
     HalfEdge * getNext();
     HalfEdge * getPrev();
     HalfEdge * getTwin();
     Face     * getFace();
-    Vertex   * getInVertex();
-    Vertex   * getOutVertex();    
+    Vertex   * getStartVertex();
+    Vertex   * getEndVertex();
     //bool operator<(const HalfEdge& x) const;              //overloaded < operator
     //static bool comp(const HalfEdge& lhs, const HalfEdge& rhs);
 };

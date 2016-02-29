@@ -19,21 +19,24 @@
 
 #include "HalfEdge.hpp"
 #include "Vector3D.hpp"
+
 class HalfEdge;
-//class Vector3D;
-//class Matrix4;
+
 /*!
- * \brief   Data class helps to organize the vertsx data that need
+ * \brief   Data class helps to organize the Vertexe data that needs
  *          to be loaded onto the GPU.
  */
 class Data
 {
 private:
-    Vector4D position;
+    Vector4D position;              /**< (x,y,z,1) position. */
     Vector4D color;
     Vector4D normal;
     
 public:
+    /*!
+     * \Brief   : Constructor, instantiates using Vetex's position.
+     */
     Data(Vector3D p)
     {
         position[0] = p[0];
@@ -51,7 +54,9 @@ public:
         normal[2] = 0;
         normal[3] = 1;
     }
-    
+    /*!
+     * \Brief   : Constructor, instantiates using Vetex's position, color and normal.
+     */
     Data(Vector3D p, Vector4D c, Vector3D n)
     {
         position[0] = p[0];
@@ -69,14 +74,14 @@ public:
         normal[2] = n[2];
         normal[3] = 1;
     }
-    
+    /*!
+     * \Brief   : Returns the position vector, used by VErtex class.
+     */
     Vector4D getPosition()
     {
         return position;
     }
-
-    
-};
+}; //End Class Data
 
 /*!
  * \brief   Containds all model's vertex information
@@ -85,29 +90,40 @@ class Vertex
 {
 protected:
     HalfEdge *halfedge;
-    Data *data;
+    Data *data;                     /**< Contains the raw data (position, color and normal). */
     
 public:
-    int id;
-  
+    int id;                         /**< Identify the vertices based on input order (Index). */
+    /*!
+     * \Brief   : Default constructor.
+     */
     Vertex(){}
-    
+    /*!
+     * \Brief   : Constructor, Initializes Vertex using position vector.
+     */
     Vertex(Vector3D position)
     {
         Vector3D color = Vector3D(0.5,0.5,0.5);
         data = new Data(position);
     }
+    /*!
+     * \Brief   : Constructor, Initializes Vertex using position, color and normal vectors.
+     */
     Vertex(Vector3D position, Vector4D color, Vector3D normal)
     {
         data = new Data(position, color, normal);
     }
-    
+    /*!
+     * \Brief   : Constructor, Initializes Vertex using position and normal vectors.
+     */
     Vertex(Vector3D position, Vector3D normal)
     {
         Vector4D color = Vector4D(0.5,0.5,0.5,1);
         data = new Data(position, color, normal);
     }
-
+    /*!
+     * \Brief   : Destructor.
+     */
     ~Vertex(){}
     
     Vector3D getPosition()
@@ -126,7 +142,7 @@ public:
         halfedge = he;
     }
     
-    HalfEdge *getInHalfEdge()
+    HalfEdge *getHalfEdge()
     {
         return halfedge;
     }

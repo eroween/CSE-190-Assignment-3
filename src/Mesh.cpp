@@ -85,7 +85,7 @@ std::vector<Face*> Mesh::findFacesAroundVertex(Vertex *v)
 std::vector<HalfEdge*> Mesh::findEdgesIN(Vertex *v)
 {
     std::vector<HalfEdge*> edges;
-    HalfEdge *e0    = v->getInHalfEdge();
+    HalfEdge *e0    = v->getHalfEdge();
     HalfEdge *edge  = e0;
     int i = 0;
     do
@@ -113,7 +113,7 @@ std::vector<HalfEdge*> Mesh::findEdgesIN(Vertex *v)
 std::vector<HalfEdge*> Mesh::findEdgesOUT(Vertex *v)
 {
     std::vector<HalfEdge*> edges;
-    HalfEdge *e0    = v->getInHalfEdge();
+    HalfEdge *e0    = v->getHalfEdge();
     HalfEdge *edge  = e0;
     int i = 0;
     do
@@ -267,9 +267,8 @@ void Mesh::initMesh()
     int i = 0;
     int edgeId = 0;
     
-    
-    int f0, f1, f2;
-    Vertex *v0, *v1, *v2;
+    int faces[3];//f0, f1, f2;
+    Vertex *v[3];//*v0, *v1, *v2;
     
     numOfVertices = numOFinputFaces * 3;
     
@@ -280,35 +279,35 @@ void Mesh::initMesh()
     {
         
         /**< Each Face has 3 vertex; vo, v1 and v2.*/
-        f0 = (*it)->faceVertexes[0];
-        f1 = (*it)->faceVertexes[1];
-        f2 = (*it)->faceVertexes[2];
+        faces[0] = (*it)->faceVertexes[0];
+        faces[1] = (*it)->faceVertexes[1];
+        faces[2] = (*it)->faceVertexes[2];
         
         
-        v0 = inputVertex[f0];
-        v1 = inputVertex[f1];
-        v2 = inputVertex[f2];
+        v[0] = inputVertex[faces[0]];
+        v[1] = inputVertex[faces[0]];
+        v[2] = inputVertex[faces[0]];
         
         // Calculate face normals
-        (*it)->setVertexes(*v0,*v1,*v2);
+        (*it)->setVertexes(*v[0],*v[1],*v[2]);
         (*it)->setNormal();
         
-        HalfEdge *e0 = new HalfEdge(*it, v0, v2);   //(in <- out)
+        HalfEdge *e0 = new HalfEdge(*it, v[0], v[2]);   //(in <- out)
         e0->id = edgeId++;
-        v0->setHalfEdge(e0);
-        edge_map[EMK(v0->id, v2->id)] = e0;         //(in <- out)
+        v[0]->setHalfEdge(e0);
+        edge_map[EMK(v[0]->id, v[2]->id)] = e0;         //(in <- out)
   
         
-        HalfEdge *e1 = new HalfEdge(*it, v1, v0);
+        HalfEdge *e1 = new HalfEdge(*it, v[1], v[0]);
         e1->id = edgeId++;
-        v1->setHalfEdge(e1);
-        edge_map[EMK(v1->id, v0->id)] = e1;
+        v[1]->setHalfEdge(e1);
+        edge_map[EMK(v[1]->id, v[0]->id)] = e1;
     
         
-        HalfEdge *e2 = new HalfEdge(*it, v2, v1);
+        HalfEdge *e2 = new HalfEdge(*it, v[2], v[1]);
         e2->id = edgeId++;
-        v2->setHalfEdge(e2);
-        edge_map[EMK(v2->id, v1->id)] = e2;
+        v[2]->setHalfEdge(e2);
+        edge_map[EMK(v[2]->id, v[1]->id)] = e2;
         
         (*it)->setHalfEdge(e0);
         
@@ -322,8 +321,6 @@ void Mesh::initMesh()
         i += 3;
     }
 
-   
-    
     // Loop over edges in edge_map and find its twin edge
     for(EdgeMap::const_iterator emit = edge_map.begin(); emit != edge_map.end(); emit++)
     {

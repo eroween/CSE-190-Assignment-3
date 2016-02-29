@@ -1,3 +1,7 @@
+//
+// Matrix4.hpp
+// Cristian Troncoso 2/15/2016
+//
 #ifndef Matrix4_hpp
 #define Matrix4_hpp
 
@@ -16,7 +20,7 @@ private:
     
 public:
     /*!
-     * Brief    : Constructor, Initializes the matrix to zero.
+     * \Brief    : Constructor, Initializes the matrix to zero.
      */
     Matrix4()
     {
@@ -27,7 +31,7 @@ public:
     }
     
     /*!
-     * Brief    : Constructor, Initializes the matrix to a constant.
+     * \Brief    : Constructor, Initializes the matrix to a constant.
      */
     Matrix4(float c)
     {
@@ -39,9 +43,8 @@ public:
             }
         }
     }
-    
     /*!
-     * Brief    : Constructor, Initializes from another matrix.
+     * \Brief    : Constructor, Initializes from another matrix.
      */
     Matrix4(Matrix4& m)
     {
@@ -53,19 +56,19 @@ public:
             }
         }
     }
-    
-    ~Matrix4(){}
-    
     /*!
-    * Brief    : Return the raw data of this matrix.
+     * \Brief   : Destructor.
+     */
+    ~Matrix4(){}
+    /*!
+    * \Brief    : Return the raw data of this matrix.
     */
     float* get(int vector,int element)
     {
        return data;
     }
-
     /*!
-    * Brief    : Negation.
+    * \Brief    : Negation.
     */
     inline Matrix4 operator-( void ) const
     {
@@ -76,9 +79,8 @@ public:
         }
         return m;
     }
-
     /*!
-    * Brief    : Matrix Addition.
+    * \Brief    : Matrix Addition.
     */
     inline Matrix4 operator+(const Matrix4& m)
     {
@@ -92,9 +94,8 @@ public:
         }
         return ret;
     }
-    
     /*!
-    * Brief    : Matrix Subtraction.
+    * \Brief    : Matrix Subtraction.
     */
     inline Matrix4 operator-(const Matrix4& m)
     {
@@ -108,10 +109,8 @@ public:
         }
         return ret;
     }
-
-    
     /*!
-     *Brief     : scalar multiplication.
+     *\Brief     : scalar multiplication.
      */
     inline Matrix4 operator*( const double& c ) const
     {
@@ -122,7 +121,6 @@ public:
         }
         return ret;
     }
-        
     /*!
      * \Brief   : Addition / assignment.
      */
@@ -136,7 +134,6 @@ public:
             }
         }
     }
-    
     /*!
      * \Brief   : Vector4D matrix multiplication.
      */
@@ -150,11 +147,12 @@ public:
                 b[i] += data[j * 4 + i] * a[j];
             }
         }
-       
-       return b;
+        return b;
     }
 
- 
+    /*!
+     * \Brief   : Returns the transpose.
+     */
     Matrix4 transpose(void)
     {
        Matrix4 transpose;
@@ -167,7 +165,9 @@ public:
        }
        return transpose;
     }
-        
+    /*!
+     * \Brief   : Inverse.
+     */
     Matrix4 inverse(void)
     {
         Matrix4 b;
@@ -176,23 +176,22 @@ public:
         
         return b;
     }
-    
+    /*!
+     * \Brief   : Calculate the inverse of this matrix with the assumption that it is ortho-normal.
+     */
     Matrix4 orthoNormalInverse(void)
     {
         Matrix4 b;
-        
-        //Calculate the inverse of this matrix with the assumption that it is ortho-normal
         //This will be useful when implementing cameras!
-        
         return b;
     }
-    
-    
+    /*!
+     * \Brief   : Return the value a location j.
+     */
     inline double operator[]( int j ) const
     {
         return data[j];
     }
-    
     /*!
      * \Brief   : Print out data.
      */
@@ -234,7 +233,5 @@ public:
             std::cout << std::setw(1) << (element == 3 ? "]" : " ") << std::endl;
         }
     }
-
-
 };
-#endif
+#endif // End Matrix_hpp
