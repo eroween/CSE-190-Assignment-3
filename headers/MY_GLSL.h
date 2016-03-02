@@ -38,7 +38,7 @@ int Read_Shader(char *name, char **shader_text)
     return count;
 }
 
-bool Read_Shader_Source(char *shader_name, char **vertexShader, char **fragmentShader)
+bool Read_Shader_Source(const char *shader_name, char **vertexShader, char **fragmentShader)
 {
 	char vert_shader_name[1024];
 	sprintf(vert_shader_name, "%s.vert", shader_name);
@@ -60,7 +60,7 @@ bool Read_Shader_Source(char *shader_name, char **vertexShader, char **fragmentS
 
 
 //  GLSL setup routine
-GLuint Setup_GLSL(char *name)
+GLuint Setup_GLSL(const char *name)
 {
 	GLuint programObject;
 	GLuint vertexShaderObject;

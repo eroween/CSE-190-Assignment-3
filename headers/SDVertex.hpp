@@ -17,11 +17,16 @@
 
 #pragma once
 
+#include    <glm/glm.hpp>
+
 class   SDFace;
 
 class   SDVertex
 {
     public:
+        ///
+        /// \brief Default constructor.
+        ///
         SDVertex(void);
 
         ///

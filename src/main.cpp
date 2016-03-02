@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-#include <iostream>   
+#include <iostream>
 #include <fstream>
 
 #include "Mesh.hpp"
@@ -38,10 +38,9 @@ void InitVBO()
     glBindBuffer(GL_ARRAY_BUFFER, vboHandle[0]);   // bind the first handle
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(Data)*(mesh->getNunOfVertices()), (GLdouble*)(mesh->getVertexData()), GL_STATIC_DRAW);
-    
-    
+
     /**
-     * This chunk of code here is to prepare the index buffer - 
+     * This chunk of code here is to prepare the index buffer -
      * Not needed so far since I am using an Array buffer rather than vertex buffer
      */
     /*
@@ -49,7 +48,7 @@ void InitVBO()
      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVBO);
      glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte)*(numOfVertices), tindices, GL_STATIC_DRAW);//!<  We moved the position
      //!< and color data over to the graphics card. There will be no redundant data copy at drawing time */
-    
+
 }
 
 // Display
@@ -59,18 +58,18 @@ void display()
     glEnable(GL_DEPTH_TEST);    // need depth test to correctly draw 3D objects
     glClearColor(0,0,0,1);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
- 
+
     glUseProgram(programObject);
-    
-    
+
+
     GLuint c0=glGetAttribLocation(programObject, "vertex_position");
     GLuint c1=glGetAttribLocation(programObject, "vertex_color");
     GLuint c2=glGetAttribLocation(programObject, "vertex_normal");
-    
+
     glVertexAttribPointer(c0,4,GL_DOUBLE, GL_FALSE, 12*sizeof(GLdouble),(GLvoid*)0);//(char*) NULL+0
     glVertexAttribPointer(c1,4,GL_DOUBLE, GL_FALSE, 12*sizeof(GLdouble),(GLvoid*)(4*sizeof(GLdouble)));//(char*) NULL+16
     glVertexAttribPointer(c2,4,GL_DOUBLE, GL_FALSE, 12*sizeof(GLdouble),(GLvoid*)(8*sizeof(GLdouble)));//(char*) NULL+24
-    
+
     glEnableVertexAttribArray(c0);
     glEnableVertexAttribArray(c1);
     glEnableVertexAttribArray(c2);
@@ -83,16 +82,16 @@ void display()
     //Tells OpenGL how to walk through the VBOs, i.e., how the data are packed
     //number of coordinates per vertex (4 here), type of the coordinates,
     //stride between consecutive vertices, and pointers to the first coordinate
-    
-    
+
+
     GLint viewLoc = glGetUniformLocation(programObject, "view");
     GLint projLoc = glGetUniformLocation(programObject, "projection");
     GLint modelLoc = glGetUniformLocation(programObject, "model");
-    
+
     glm::mat4 projection = glm::perspective(45.0f,1.0f,.1f,100.0f);
-    
+
     /*
-    
+
     glm::mat4 view = glm::lookAt(glm::vec3(0.0, 20.0, 30.0),
                                  glm::vec3(0.0, 0.0, 0.0),
                                  glm::vec3(0.0, 5.0, .0));
@@ -103,25 +102,25 @@ void display()
 
     glm::mat4 model;
     model = glm::mat4(1.0f);
-    
+
     model = glm::translate(model, translate);
     //model = glm::mat4(1.0f);
-    
+
     model = glm::rotate(model, x_angle, glm::vec3(0.0f, 1.0f, 0.0f));
     model = glm::rotate(model, y_angle, glm::vec3(1.0f, 0.0f, 0.0f));
     model = glm::scale(model, glm::vec3(scale_size));
-    
+
     // Pass the matrices to the shader
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE,  &view[0][0]);
     glUniformMatrix4fv(projLoc, 1, GL_FALSE,&projection[0][0]);
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &model[0][0]);
-    
+
     //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     //glDrawElements(GL_TRIANGLES, numOfVertices, GL_UNSIGNED_BYTE, (char*) NULL+0);
     glDrawArrays(GL_TRIANGLES, 0, mesh->getNunOfVertices());
-    
- 
-    
+
+
+
     glutSwapBuffers();
 }
 
@@ -145,7 +144,7 @@ void mymotion(int x, int y)
         if (x_angle > 180) x_angle -= 360;
         else if (x_angle <-180) x_angle += 360;
         press_x = x;
-        
+
         y_angle += (y - press_y)/10.0;
         if (y_angle > 180) y_angle -= 360;
         else if (y_angle <-180) y_angle += 360;
@@ -202,7 +201,7 @@ void keyHandler(unsigned char key, int x, int y)
             InitVBO();
             glutPostRedisplay();
             break;
-      
+
         default:
             break;
     }

@@ -80,7 +80,6 @@ std::vector<HalfEdge*> Mesh::findEdgesEnteringVertex(Vertex *v)
     std::vector<HalfEdge*> edges;
     HalfEdge *e0    = v->getHalfEdge();
     HalfEdge *edge  = e0;
-    int i = 0;
     do
     {
         if(edge->getTwin() != NULL)
@@ -116,8 +115,6 @@ std::vector<HalfEdge*> Mesh::findEdgesLeavingVertex(Vertex *v)
 
 void Mesh::loadObject(const std::string filename)
 {
-
-    FILE * file;
     int faceCounter = 0;
     int vertCounter = 0;
     std::string line;
@@ -128,10 +125,6 @@ void Mesh::loadObject(const std::string filename)
     std::vector<std::string> tokens;
     std::string token;
     std::vector<std::string> tok;
-
-    const char * c = filename.c_str();
-
-    file = fopen(c,"rb");
 
     std::cout << "Starting parse..." << std::endl;
 

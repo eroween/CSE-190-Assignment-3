@@ -16,8 +16,8 @@ class Vector3D
 protected:
     double x, y, z;             /**< Components */
 public:
-    
-    /*! 
+
+    /*!
      * \Brief   : Constructor, Initializes vector (0,0,0).
      */
     Vector3D(): x( 0.0 ), y( 0.0 ), z( 0.0 ) { }
@@ -50,10 +50,9 @@ public:
      */
     double* xyz()
     {
-        double data[] = {x, y, z};;
-        return &data[0];
+        return &x;
     }
-    /*! 
+    /*!
      * \Brief   : Set a value at a specific index in a Vector.
      */
     void set(int index, double value)

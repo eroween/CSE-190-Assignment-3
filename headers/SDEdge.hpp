@@ -17,6 +17,9 @@
 
 #pragma once
 
+class   SDFace;
+class   SDVertex;
+
 class   SDEdge
 {
     public:
@@ -31,15 +34,31 @@ class   SDEdge
         ~SDEdge(void);
 
     public:
-        bool    operator<(const SDEdge &other);
 
-    public:
+        ///
+        /// \brief The id of the edge.
+        ///
+        unsigned int    id(void) const;
 
-        unsigned int    id(void);
-        SDVertex    *origin(void);
-        SDVertex    *target(void);
-        SDFace      *left_face(void);
-        SDFace      *right_face(void);
+        ///
+        /// \brief The origin of the edge.
+        ///
+        SDVertex    *origin(void) const;
+
+        ///
+        /// \brief The target of the edge.
+        ///
+        SDVertex    *target(void) const;
+
+        ///
+        /// \brief The left face adjacent to the edge.
+        ///
+        SDFace      *left_face(void) const;
+
+        ///
+        /// \brief The right face adjacent to the edge.
+        ///
+        SDFace      *right_face(void) const;
 
     private:
         ///

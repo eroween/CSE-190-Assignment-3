@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include    <vector>
+
 class   SDVertex;
 
 class   SDFace
@@ -36,21 +38,39 @@ class   SDFace
         ///
         /// \brief Return a vector containing all vertices used by the face.
         ///
-        std::vector<SDVertex *>     vertices(void) const;
+        const std::vector<SDVertex *>   &vertices(void) const;
 
         ///
         /// \brief Return a vector containing all adjacent faces.
         ///
-        std::vector<SDFace *>       adjacent_faces(void) const;
+        const std::vector<SDFace *>     &adjacent_faces(void) const;
 
         ///
         /// \brief Return a vector containing all childrens faces.
         ///
-        std::vector<SDFace *>       childrens_faces(void) const;
+        const std::vector<SDFace *>     &childrens_faces(void) const;
 
     private:
-        SDVertex    *m_vertices[3];
-        SDFace      *m_adjacent_faces[3];
-        SDFace      *m_childrens[4];
+        ///
+        /// \brief The vector of vertices
+        ///
+        /// The size of the vector is always 3, because we only support
+        /// triangle face.
+        ///
+        std::vector<SDVertex *>     m_vertices;
+
+        ///
+        /// \brief The vector of adjacent faces.
+        ///
+        /// The size of the vector is always 3, but some face can be null.
+        ///
+        std::vector<SDFace *>   m_adjacent_faces;
+
+        ///
+        /// \brief The vector of childrens faces.
+        ///
+        /// The size of the vector is always 4.
+        ///
+        std::vector<SDFace *>   m_childrens_faces;
 
 };

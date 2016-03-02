@@ -2,7 +2,12 @@
 # ------------------------------------
 
 # Object files list
-OBJS = src/main.cpp src/Mesh.cpp src/HalfEdge.cpp
+OBJS = src/main.cpp		\
+	   src/Mesh.cpp 	\
+	   src/HalfEdge.cpp	\
+	   src/SDFace.cpp	\
+	   src/SDEdge.cpp	\
+	   src/SDVertex.cpp
 
 # Executable name
 EXENAME = MeshEditor
