@@ -26,7 +26,6 @@
 #include <glm.hpp>
 #include <stack>
 
-
 #include "Face.hpp"
 
 #define DEBUG 3
@@ -45,35 +44,35 @@ __FILE__, __LINE__, __func__, ##args)
 class Mesh
 {
 
-    
+
 protected:
     Vertex *vertices;                   /**< Stores "all" model's vertices */
-    
+
     Data* outputData;                   /**< Raw data from all vertices, with interleaving location, color and normal */
-    
+
     int numOfVertices;                  /**< Total number of vertices after face parsing (ouput number of vertices) */
-    
+
     int numOfInputVertices;             /**< Num of vertices on input file */
     int numOFinputFaces;                /**< Num of faces on input file */
-    
+
     std::vector<Face*> inputFaces;      /**< Contains original vertices from input file */
     std::vector<Vertex*> inputVertex;   /**< Contains original faces from input file */
 
-    
-    
+
+
     typedef std::pair<int,int> EMK;     /**< Make a short name for the edge map's key, based on start and end vertex */
-    
+
     typedef HalfEdge * EMV;             /**< Make a short name for the type stored at each edge, the edge map's value */
-    
+
     typedef std::map<EMK,EMV> EdgeMap;  /**< Make a short name for the edge map */
-    
+
     EdgeMap edge_map;
 
-    
+
 public:
-    
+
     std::vector<HalfEdge*> hEdgeBuffer; /**< It stores all half edges data structures */
-    
+
     /*!
      * \brief   Mesh constructor.
      */
@@ -96,7 +95,7 @@ public:
      *          It uses the faces values (x,y,z) as a vertex id.
      */
     void createVertexBuffer();
-    
+
     /*!
      * \brief   TODO - Draw is not implemented.
      */
@@ -146,7 +145,7 @@ public:
      * \brief   Debugging
      * \TODO    move this to test.hpp
      */
-    void test(); 
+    void test();
 };
 
 #endif /* Mesh_hpp */

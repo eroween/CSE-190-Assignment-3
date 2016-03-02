@@ -2,31 +2,27 @@
 # ------------------------------------
 
 # Object files list
-OBJS = main.cpp Mesh.cpp HalfEdge.cpp
+OBJS = src/main.cpp src/Mesh.cpp src/HalfEdge.cpp
 
 # Executable name
 EXENAME = MeshEditor
 
 # Macros
 CC = g++
-CCOPTS = -c -g -O3 -Wall -Wno-deprecated
+CXXFLAGS = -g -O3 -Wall -Wno-deprecated -std=c++14
 LINK = g++
 LINKOPTS = -o
-INCLUDES =-I../headers/ -I../utility/glm/glm/
+INCLUDES = -I./headers/ -I./utility/glm/glm/
 all : $(EXENAME)
 
 # Testing for OS X v Linux
 OS = $(shell uname -s)
 
-ifeq ($(OS), Darwin)
-	LIBS = -framework GLUT -framework OpenGL
-else
-	LIBS = -lGL -lGLU -lglut
-endif
+LIBS = -lGL -lGLU -lglut -lGLEW
 
 # The compiling step
 $(EXENAME) : $(OBJS)
-	$(LINK) $(LINKOPTS) $(EXENAME) $(OBJS) $(LIBS) $(INCLUDES)
+	$(LINK) $(CXXFLAGS) $(LINKOPTS) $(EXENAME) $(OBJS) $(LIBS) $(INCLUDES)
 
 # Object files
 main.o : main.cpp 

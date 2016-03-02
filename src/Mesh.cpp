@@ -4,6 +4,7 @@
 #include <sstream>
 #include "Matrix4.hpp"
 
+#include <string>
 
 
 Mesh::Mesh(std::string filename)
@@ -43,7 +44,7 @@ void Mesh::test()
     }
 #endif
 #if 0
-    
+
     // Print all faces round a face
     // Test with face 0 and face 12 (12 is on boundary)
     Face *f0  = NULL;
@@ -68,7 +69,7 @@ void Mesh::test()
         printf("%d, ",(*it)->id);
     }
     printf("\n");
-    
+
 #endif
 #if 0
     //print all edges entering a vertex.
@@ -117,8 +118,8 @@ void Mesh::test()
     //TODO
     //Finding faces on boundary fails -> infinite loop
     std::vector<Face*>facesvvv11 = findFacesAroundVertex(vvv11);
-    
-    
+
+
     printf("\nFaces around Vertex 0 :");
     for(std::vector<Face*>::iterator it=facesvvv0.begin(); it!=facesvvv0.end(); ++it)
     {
@@ -137,7 +138,7 @@ double * Mesh::getVertexData()
 {
     double *temp = (double*)(&outputData)[0];
     return temp;
-    
+
 }
 
 int Mesh::getNunOfVertices()
@@ -182,7 +183,7 @@ std::vector<Face*> Mesh::findFacesAroundVertex(Vertex *v)
         if(f != NULL)
             faces.push_back(f);
     }
-  
+
     return faces;
 }
 
@@ -227,23 +228,23 @@ std::vector<HalfEdge*> Mesh::findEdgesLeavingVertex(Vertex *v)
 
 void Mesh::loadObject(const std::string filename)
 {
-    
+
     FILE * file;
     int faceCounter = 0;
     int vertCounter = 0;
     std::string line;
     Vector4D color;
-    
+
     std::ifstream infile(filename);
-    
+
     std::vector<std::string> tokens;
     std::string token;
     std::vector<std::string> tok;
 
     const char * c = filename.c_str();
-    
+
     file = fopen(c,"rb");
-    
+
     std::cout << "Starting parse..." << std::endl;
 
     while (std::getline(infile, line))
@@ -251,7 +252,7 @@ void Mesh::loadObject(const std::string filename)
         //Split a line into tokens by delimiting it on spaces
         tokens.clear();
         tokens = split(line, ' ', tokens);
-        
+
         //If first token is a v then it gots to be a vertex
         if(tokens.at(0).compare("OFF") == 0)
         {
@@ -269,16 +270,16 @@ void Mesh::loadObject(const std::string filename)
             float x = std::stof(tokens.at(0));
             float y = std::stof(tokens.at(1));
             float z = std::stof(tokens.at(2));
-            
+
             Vector3D position = Vector3D(x,y,z);
             Vertex *ver = new Vertex(position);
-            
+
             ver->setHalfEdge(NULL);
             ver->id = vertCounter;
-            
+
             inputVertex.push_back(ver);
             vertCounter++;
-            
+
         }
         if(tokens.size() == 4)
         {
@@ -287,16 +288,16 @@ void Mesh::loadObject(const std::string filename)
             color[1] = ((double)rand()) / ((double)RAND_MAX) * 1.0 + 0.1;
             color[2] = ((double)rand()) / ((double)RAND_MAX) * 1.0 + 0.1;
             color[3] = 1;
-            
+
             int x = std::stof(tokens.at(1)) ;//+ 1;
             int y = std::stof(tokens.at(2)) ;//+ 1;
             int z = std::stof(tokens.at(3)) ;//+ 1;
-            
+
             int fv[] = {x,y,z};
-            
+
             Face *f = new Face(fv, color);
             f->id = faceCounter;
-            
+
             inputFaces.push_back(f);
             faceCounter++;
         }
@@ -311,10 +312,10 @@ void Mesh::buildHalfEdgeConnections(HalfEdge *e0, HalfEdge *e1, HalfEdge *e2)
 
     e1->setPrev(e0);
     e1->setNext(e2);
- 
+
     e2->setPrev(e1);
     e2->setNext(e0);
-    
+
 }
 
 void Mesh::createData(int i, Face *f)
@@ -323,7 +324,7 @@ void Mesh::createData(int i, Face *f)
     Vertex *v0;
     Vertex *v1;
     Vertex *v2;
-    
+
     if(numOFinputFaces == 2914 && i == 8742)
     {
         std::cout<<"i : "<<i<<std::endl;
@@ -332,19 +333,19 @@ void Mesh::createData(int i, Face *f)
     int f0 = f->faceVertexes[0];
     int f1 = f->faceVertexes[1];
     int f2 = f->faceVertexes[2];
-    
-    
+
+
     v0 = inputVertex[f0];
     v1 = inputVertex[f1];
     v2 = inputVertex[f2];
-    
+
     vertices[i] = Vertex(v0->getPosition(), f->getColor(), f->getNormal());
     outputData[i] = *vertices[i].getOuputData();
-    
+
     vertices[i+1] = Vertex(v1->getPosition(), f->getColor(), f->getNormal());
     outputData[i+1] = *vertices[i+1].getOuputData();
 
-    
+
     vertices[i+2] = Vertex(v2->getPosition(), f->getColor(), f->getNormal());
     outputData[i+2] = *vertices[i+2].getOuputData();
 }
@@ -354,57 +355,57 @@ void Mesh::initMesh()
 {
     int i = 0;
     int edgeId = 0;
-    
+
     int faces[3];//f0, f1, f2;
     Vertex *v[3];//*v0, *v1, *v2;
-    
+
     numOfVertices = numOFinputFaces * 3;
-    
+
     vertices    = (Vertex*)malloc(sizeof(Vertex)* numOfVertices);
     outputData  = (Data*)malloc(sizeof(Data)* numOfVertices);
-    
+
     for(std::vector<Face*>::iterator it=inputFaces.begin(); it != inputFaces.end(); ++it)
     {
-        
+
         /**< Each Face has 3 vertex; vo, v1 and v2.*/
         faces[0] = (*it)->faceVertexes[0];
         faces[1] = (*it)->faceVertexes[1];
         faces[2] = (*it)->faceVertexes[2];
-        
-        
+
+
         v[0] = inputVertex[faces[0]];
         v[1] = inputVertex[faces[1]];
         v[2] = inputVertex[faces[2]];
-        
+
         // Calculate face normals
         (*it)->setVertexes(*v[0],*v[1],*v[2]);
         (*it)->setNormal();
-        
+
         HalfEdge *e0 = new HalfEdge(*it, v[0], v[2]);   //(in <- out)
         e0->id = edgeId++;
         v[0]->setHalfEdge(e0);
         edge_map[EMK(v[0]->id, v[2]->id)] = e0;         //(in <- out)
-  
-        
+
+
         HalfEdge *e1 = new HalfEdge(*it, v[1], v[0]);
         e1->id = edgeId++;
         v[1]->setHalfEdge(e1);
         edge_map[EMK(v[1]->id, v[0]->id)] = e1;
-    
-        
+
+
         HalfEdge *e2 = new HalfEdge(*it, v[2], v[1]);
         e2->id = edgeId++;
         v[2]->setHalfEdge(e2);
         edge_map[EMK(v[2]->id, v[1]->id)] = e2;
-        
+
         (*it)->setHalfEdge(e0);
-        
+
         hEdgeBuffer.push_back(e0);
         hEdgeBuffer.push_back(e1);
         hEdgeBuffer.push_back(e2);
-        
+
         buildHalfEdgeConnections(e0,e1,e2);
-     
+
         createData(i,(*it));
         i += 3;
     }
