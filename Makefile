@@ -12,13 +12,19 @@ CC = g++
 CXXFLAGS = -g -O3 -Wall -Wno-deprecated -std=c++14
 LINK = g++
 LINKOPTS = -o
-INCLUDES = -I./headers/
+INCLUDES = -I./headers/ -I/usr/local/include/ -I/usr/local/Cellar/glew/1.12.0/include/
 all : $(EXENAME)
 
 # Testing for OS X v Linux
 OS = $(shell uname -s)
 
-LIBS = -lGL -lGLU -lglut -lGLEW
+ifeq ($(OS), Darwin)
+	LIBS = -framework GLUT -framework OpenGL -L/usr/local/Cellar/glew/1.12.0/lib -lGLEW
+else
+	LIBS = -lGL -lGLU -lglut -lGLEW
+endif
+
+#LIBS = -lGL -lGLU -lglut -lGLEW
 
 # The compiling step
 $(EXENAME) : $(OBJS)
