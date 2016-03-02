@@ -50,8 +50,7 @@ public:
      */
     double* xyz()
     {
-        double data[] = {x, y, z, w};;
-        return &data[0];
+        return &x;
     }
     /*!
      * \Brief   : Set a value at a specific index location.

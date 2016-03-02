@@ -3,6 +3,7 @@
 //#include <windows.h>
 
 #if defined __APPLE__
+#include <GL/glew.h>
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #include <GLUT/glut.h>
