@@ -12,10 +12,10 @@
 #endif
 
 #include <stdio.h>
-#include <glm.hpp>
+#include <glm/glm.hpp>
 
-#include <gtc/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 //  Read shaders from the disk into the main memory
 int Read_Shader(char *name, char **shader_text)

@@ -23,7 +23,7 @@
 #include <map>
 #include <iostream>
 #include <vector>
-#include <glm.hpp>
+#include <glm/glm.hpp>
 #include <stack>
 
 #include "Face.hpp"

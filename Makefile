@@ -12,7 +12,7 @@ CC = g++
 CXXFLAGS = -g -O3 -Wall -Wno-deprecated -std=c++14
 LINK = g++
 LINKOPTS = -o
-INCLUDES = -I./headers/ -I./utility/glm/glm/
+INCLUDES = -I./headers/
 all : $(EXENAME)
 
 # Testing for OS X v Linux
