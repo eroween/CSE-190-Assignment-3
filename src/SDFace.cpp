@@ -55,3 +55,31 @@ SDFace::vertex(unsigned int index, SDVertex *vertex)
 {
     this->m_vertices[index] = vertex;
 }
+
+void
+SDFace::adjacent_face(unsigned int index, SDFace *face)
+{
+    this->m_adjacent_faces[index] = face;
+}
+
+
+
+SDFace *
+SDFace::left_adjacent_face(const SDVertex *vertex) const
+{
+    if (this->m_vertices[0] == vertex)
+        return this->m_adjacent_faces[2];
+    else if (this->m_vertices[1] == vertex)
+        return this->m_adjacent_faces[0];
+    return this->m_adjacent_faces[1];
+}
+
+SDFace *
+SDFace::right_adjacent_face(const SDVertex *vertex) const
+{
+    if (this->m_vertices[0] == vertex)
+        return this->m_adjacent_faces[0];
+    else if (this->m_vertices[1] == vertex)
+        return this->m_adjacent_faces[1];
+    return this->m_adjacent_faces[2];
+}

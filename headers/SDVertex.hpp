@@ -36,9 +36,15 @@ class   SDVertex
 
     public:
         ///
-        /// \brief Translate the vertex to a new position.
+        /// \brief Initialise the vertex, (set the boundary and regular
+        ///     attribute).
         ///
-        void    translate(const glm::vec3 &position);
+        void    initialise(void);
+
+        ///
+        /// \brief Return the valence of the vertex.
+        ///
+        unsigned int    valence(void) const;
 
     public:
         ///
@@ -50,6 +56,11 @@ class   SDVertex
         /// \brief Return the position of the vertex.
         ///
         const glm::vec3     &position(void) const;
+
+        ///
+        /// \brief Return the face of the vertex.
+        ///
+        SDFace  *face(void) const;
 
         ///
         /// \brief Return true if the vertex is a regular vertex, false
@@ -70,11 +81,37 @@ class   SDVertex
         void    id(unsigned int id);
 
         ///
+        /// \brief Change the vertex position to a new position.
+        ///
+        void    position(const glm::vec3 &position);
+
+        ///
         /// \brief Change the value of the m_face field by the one in parameter.
         ///
         void    face(SDFace *face);
 
-    public:
+        ///
+        /// \brief Change the value of the m_regular field by the one in param.
+        ///
+        void    regular(bool regular);
+
+        ///
+        /// \brief Change the value of the m_boundary field by the one in param.
+        ///
+        void    boundary(bool boundary);
+
+    private:
+        ///
+        /// \brief specialised valence computation for non boundary vertex.
+        ///
+        unsigned int    non_boundary_valence(void) const;
+
+        ///
+        /// \brief Specialised valence computation for boundary vertex.
+        ///
+        unsigned int    boundary_valence(void) const;
+
+    private:
         ///
         /// \brief The id of the vertex.
         ///

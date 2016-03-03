@@ -23,7 +23,6 @@ SRCS = src/main.cpp				\
 	   src/Mesh.cpp 			\
 	   src/HalfEdge.cpp			\
 	   src/SDFace.cpp			\
-	   src/SDEdge.cpp			\
 	   src/SDVertex.cpp			\
 	   src/SDDataStructure.cpp
 

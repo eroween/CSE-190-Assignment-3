@@ -19,16 +19,16 @@
 #include    <iostream>
 
 #include    "SDDataStructure.hpp"
-#include    "SDEdge.hpp"
 #include    "SDFace.hpp"
 #include    "SDVertex.hpp"
+
+using SDEdge = std::pair<SDVertex *, SDVertex *>;
 
 SDDataStructure::SDDataStructure(
         const std::vector<unsigned int> &indices,
         const std::vector<glm::vec3> &vertex_positions) :
     m_faces(),
-    m_vertices(),
-    m_edges()
+    m_vertices()
 {
     if (indices.size() % 3 != 0)
     {
@@ -36,6 +36,8 @@ SDDataStructure::SDDataStructure(
                 " triangulated mesh.");
     }
     this->build_connectivity(vertex_positions, indices);
+    this->initialise_faces();
+    this->initialise_vertices();
 }
 
 SDDataStructure::~SDDataStructure(void)
@@ -47,10 +49,6 @@ SDDataStructure::~SDDataStructure(void)
     for (SDFace *face : this->m_faces)
     {
         delete face;
-    }
-    for (SDEdge *edge : this->m_edges)
-    {
-        delete edge;
     }
 }
 
@@ -104,7 +102,7 @@ SDDataStructure::build_connectivity(
         // set the id of the vertex.
         vertex->id(vertex_index);
         // translate the allocated vertex to its position.
-        vertex->translate(vertex_positions[vertex_index]);
+        vertex->position(vertex_positions[vertex_index]);
         // add the vertex in the list of vertex known by the datastructure.
         this->m_vertices.push_back(vertex);
         allocated_vertices.push_back(vertex);
@@ -127,61 +125,43 @@ SDDataStructure::build_connectivity(
         }
         this->m_faces.push_back(face);
     }
-    this->build_edges_connectivity();
 }
 
 void
-SDDataStructure::build_edges_connectivity(void)
+SDDataStructure::initialise_faces(void)
 {
-    std::map<std::pair<unsigned int, unsigned int>, SDEdge *> existing_edges;
+    std::map<SDEdge, std::pair<SDFace *, unsigned int>>   edges;
+    std::map<SDEdge, std::pair<SDFace *, unsigned int>>::iterator it;
 
     for (SDFace *face : this->m_faces)
     {
         auto face_vertices = face->vertices();
         for (unsigned int index = 0 ; index < 3 ; ++index)
         {
-            SDVertex *origin = face_vertices[index];
-            SDVertex *target = face_vertices[(index + 1) % 3];
-            SDEdge *edge = nullptr;
-            bool left_face = true;
-            if (origin->id() > target->id())
+            auto edge = std::make_pair(face_vertices[index],
+                    face_vertices[(index + 1) % 3]);
+            if (edge.first->id() > edge.second->id())
+                std::swap(edge.first, edge.second);
+            if ((it = edges.find(edge)) != edges.end())
             {
-                std::swap(origin, target);
-                left_face = false;
-            }
-            auto key = std::make_pair(origin->id(), target->id());
-            // check if the edge has been already created.
-            auto it = existing_edges.find(key);
-            if (it == existing_edges.end())
-            {
-                // we need to create a new edge between the origin and the
-                // target.
-                edge = this->build_edge(origin, target);
-                // save the edge for the second face using the edge (if any).
-                existing_edges.insert(std::make_pair(key, edge));
+                (*it).second.first->adjacent_face((*it).second.second, face);
+                face->adjacent_face(index, (*it).second.first);
             }
             else
             {
-                // the edge is equal to the previous edge created.
-                edge = (*it).second;
-                // because we don't support non manifold edge, we can delete it.
-                existing_edges.erase(it);
+                auto value = std::make_pair(face, index);
+                edges.insert(std::make_pair(edge, value));
             }
-            // set the face of the edge to the actual face.
-            if (left_face)
-                edge->left_face(face);
-            else
-                edge->right_face(face);
         }
     }
 }
 
-SDEdge *
-SDDataStructure::build_edge(SDVertex *origin, SDVertex *target)
+void
+SDDataStructure::initialise_vertices(void)
 {
-    SDEdge  *edge = new SDEdge();
-
-    edge->origin(origin);
-    edge->target(target);
-    return edge;
+    for (SDVertex *vertex : this->m_vertices)
+    {
+        vertex->initialise();
+    }
 }
+

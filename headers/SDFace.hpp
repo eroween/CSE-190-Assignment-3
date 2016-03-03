@@ -35,6 +35,11 @@ class   SDFace
         ~SDFace(void);
 
     public:
+
+        SDFace  *left_adjacent_face(const SDVertex *vertex) const;
+        SDFace  *right_adjacent_face(const SDVertex *vertex) const;
+
+    public:
         ///
         /// \brief Return a vector containing all vertices used by the face.
         ///
@@ -57,6 +62,11 @@ class   SDFace
         ///
         void    vertex(unsigned int index, SDVertex *vertex);
 
+        ///
+        /// \brief
+        ///
+        void    adjacent_face(unsigned int index, SDFace *face);
+
     private:
         ///
         /// \brief The vector of vertices
@@ -76,8 +86,7 @@ class   SDFace
         ///
         /// \brief The vector of childrens faces.
         ///
-        /// The size of the vector is always 4.
+        /// The size of the vector is always 4, but all face can be null.
         ///
         std::vector<SDFace *>   m_childrens_faces;
-
 };

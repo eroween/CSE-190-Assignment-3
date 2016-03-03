@@ -23,7 +23,6 @@
 
 class   SDVertex;
 class   SDFace;
-class   SDEdge;
 
 class   SDDataStructure
 {
@@ -70,16 +69,14 @@ class   SDDataStructure
                 const std::vector<unsigned int> &indices);
 
         ///
-        /// \brief Construct the edges from the list of faces and the list of
-        ///     vertices.
+        /// \brief Initialise the faces compositing the mesh.
         ///
-        void    build_edges_connectivity(void);
+        void    initialise_faces(void);
 
         ///
-        /// \brief Create an edge with an origin and a target vertex.
-        /// \return The new allocated edge.
+        /// \brief Initialise all vertices compositing the mesh.
         ///
-        SDEdge  *build_edge(SDVertex *origin, SDVertex *target);
+        void    initialise_vertices(void);
 
     private:
         ///
@@ -91,9 +88,4 @@ class   SDDataStructure
         /// \brief The list of vertices compositing the mesh.
         ///
         std::list<SDVertex *>   m_vertices;
-
-        ///
-        /// \brief The list of edges compositing the mesh.
-        ///
-        std::list<SDEdge *>     m_edges;
 };
