@@ -49,3 +49,9 @@ SDFace::childrens_faces(void) const
 {
     return this->m_childrens_faces;
 }
+
+void
+SDFace::vertex(unsigned int index, SDVertex *vertex)
+{
+    this->m_vertices[index] = vertex;
+}

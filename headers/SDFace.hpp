@@ -50,6 +50,13 @@ class   SDFace
         ///
         const std::vector<SDFace *>     &childrens_faces(void) const;
 
+    public:
+        ///
+        /// \brief Change the value of the vertex at the index "index" by the
+        ///     "vertex" value.
+        ///
+        void    vertex(unsigned int index, SDVertex *vertex);
+
     private:
         ///
         /// \brief The vector of vertices

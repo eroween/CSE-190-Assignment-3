@@ -34,6 +34,19 @@ SDVertex::~SDVertex(void)
 
 
 
+void
+SDVertex::translate(const glm::vec3 &position)
+{
+    this->m_position = position;
+}
+
+
+unsigned int
+SDVertex::id(void) const
+{
+    return this->m_id;
+}
+
 const glm::vec3 &
 SDVertex::position(void) const
 {
@@ -50,4 +63,18 @@ bool
 SDVertex::boundary(void) const
 {
     return this->m_boundary;
+}
+
+
+
+void
+SDVertex::id(unsigned int id)
+{
+    this->m_id = id;
+}
+
+void
+SDVertex::face(SDFace *face)
+{
+    this->m_face = face;
 }

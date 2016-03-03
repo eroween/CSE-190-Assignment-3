@@ -1,47 +1,41 @@
-#Makefile for OpenGL flight simulator
-# ------------------------------------
 
-# Object files list
-OBJS = src/main.cpp		\
-	   src/Mesh.cpp 	\
-	   src/HalfEdge.cpp	\
-	   src/SDFace.cpp	\
-	   src/SDEdge.cpp	\
-	   src/SDVertex.cpp
+CC=			g++
 
-# Executable name
-EXENAME = MeshEditor
+CXXFLAGS	+=	-W -Wall -Wextra -std=c++14
+CXXFLAGS	+= -O3
+CXXFLAGS	+= -g3
+CXXFLAGS	+=	-I./headers/
 
-# Macros
-CC = g++
-CXXFLAGS = -g -O3 -Wall -Wno-deprecated -std=c++14
-LINK = g++
-LINKOPTS = -o
-INCLUDES = -I./headers/ -I/usr/local/include/ -I/usr/local/Cellar/glew/1.12.0/include/
-all : $(EXENAME)
+ifeq ($(shell uname -s), Darwin)
 
-# Testing for OS X v Linux
-OS = $(shell uname -s)
+LDFLAGS = -framework GLUT -framework OpenGL -L/usr/local/Cellar/glew/1.12.0/lib -lGLEW
 
-ifeq ($(OS), Darwin)
-	LIBS = -framework GLUT -framework OpenGL -L/usr/local/Cellar/glew/1.12.0/lib -lGLEW
 else
-	LIBS = -lGL -lGLU -lglut -lGLEW
+
+LDFLAGS = -lGL -lGLU -lglut -lGLEW
+
 endif
 
-#LIBS = -lGL -lGLU -lglut -lGLEW
 
-# The compiling step
-$(EXENAME) : $(OBJS)
-	$(LINK) $(CXXFLAGS) $(LINKOPTS) $(EXENAME) $(OBJS) $(LIBS) $(INCLUDES)
+NAME=	MeshEditor
 
-# Object files
-main.o : main.cpp 
-	$(CC) $(CCOPTS) main.cpp
-mesh.o : Mesh.cpp Mesh.hpp
-	$(CC) $(CCOPTS) Mesh.cpp
-HalfEdge.o: HalfEdge.cpp HalfEdge.hpp
-	$(CC) $(CCOPTS) HalfEDge.cpp
+SRCS = src/main.cpp				\
+	   src/Mesh.cpp 			\
+	   src/HalfEdge.cpp			\
+	   src/SDFace.cpp			\
+	   src/SDEdge.cpp			\
+	   src/SDVertex.cpp			\
+	   src/SDDataStructure.cpp
 
-clean :
-	rm -f *.o $(EXENAME) 2>/dev/null
+OBJ=		$(SRCS:.cpp=.o)
+
+all: 	$(OBJ)
+	$(CC) $(OBJ) -o $(NAME) $(LDFLAGS)
+
+clean:	
+	rm -f $(OBJ)
+
+fclean: clean
+	rm -f $(NAME)
+
+re: fclean all

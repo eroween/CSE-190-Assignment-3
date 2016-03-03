@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include "Matrix4.hpp"
+#include    "SDDataStructure.hpp"
 
 #include <string>
 
@@ -19,7 +20,7 @@ Mesh::Mesh(std::string filename)
 
 Mesh::~Mesh()
 {
-	 DEBUG_PRINT("TODO\n");
+    DEBUG_PRINT("TODO\n");
 }
 
 double * Mesh::getVertexData()
@@ -126,6 +127,9 @@ void Mesh::loadObject(const std::string filename)
     std::string token;
     std::vector<std::string> tok;
 
+    std::vector<glm::vec3>  vertex_positions;
+    std::vector<unsigned int>   indices;
+
     std::cout << "Starting parse..." << std::endl;
 
     while (std::getline(infile, line))
@@ -144,6 +148,10 @@ void Mesh::loadObject(const std::string filename)
         {
             numOfInputVertices = std::stof(tokens.at(0));
             numOFinputFaces = std::stof(tokens.at(1));
+
+            vertex_positions.reserve(numOfInputVertices);
+            indices.reserve(numOFinputFaces * 3);
+
         }
         if(tokens.size() == 3)
         {
@@ -151,6 +159,9 @@ void Mesh::loadObject(const std::string filename)
             float x = std::stof(tokens.at(0));
             float y = std::stof(tokens.at(1));
             float z = std::stof(tokens.at(2));
+
+            // position
+            vertex_positions.emplace_back(x, y, z);
 
             Vector3D position = Vector3D(x,y,z);
             Vertex *ver = new Vertex(position);
@@ -170,11 +181,15 @@ void Mesh::loadObject(const std::string filename)
             color[2] = ((double)rand()) / ((double)RAND_MAX) * 1.0 + 0.1;
             color[3] = 1;
 
-            int x = std::stof(tokens.at(1)) ;//+ 1;
-            int y = std::stof(tokens.at(2)) ;//+ 1;
-            int z = std::stof(tokens.at(3)) ;//+ 1;
+            int v1 = std::stoi(tokens.at(1)) ;//+ 1;
+            int v2 = std::stoi(tokens.at(2)) ;//+ 1;
+            int v3 = std::stoi(tokens.at(3)) ;//+ 1;
 
-            int fv[] = {x,y,z};
+            indices.push_back(v1);
+            indices.push_back(v2);
+            indices.push_back(v3);
+
+            int fv[] = {v1, v2, v3};
 
             Face *f = new Face(fv, color);
             f->id = faceCounter;
@@ -183,6 +198,10 @@ void Mesh::loadObject(const std::string filename)
             faceCounter++;
         }
     }
+
+    std::cout << "number of indices : " << indices.size() << std::endl;
+    std::cout << "number of vertex positions : " << vertex_positions.size() << std::endl;
+
     std::cout << "Done parsing." << std::endl;
 }
 

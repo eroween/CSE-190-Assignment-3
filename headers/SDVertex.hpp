@@ -35,6 +35,16 @@ class   SDVertex
         ~SDVertex(void);
 
     public:
+        ///
+        /// \brief Translate the vertex to a new position.
+        ///
+        void    translate(const glm::vec3 &position);
+
+    public:
+        ///
+        /// \brief Return the id of the vertex.
+        ///
+        unsigned int    id(void) const;
 
         ///
         /// \brief Return the position of the vertex.
@@ -54,6 +64,21 @@ class   SDVertex
         bool    boundary(void) const;
 
     public:
+        ///
+        /// \brief Change the id of the vertex by the one in parameter.
+        ///
+        void    id(unsigned int id);
+
+        ///
+        /// \brief Change the value of the m_face field by the one in parameter.
+        ///
+        void    face(SDFace *face);
+
+    public:
+        ///
+        /// \brief The id of the vertex.
+        ///
+        unsigned int    m_id;
 
         ///
         /// \brief The position value of the vertex.

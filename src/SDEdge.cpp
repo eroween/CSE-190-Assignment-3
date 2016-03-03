@@ -18,7 +18,6 @@
 #include    "SDEdge.hpp"
 
 SDEdge::SDEdge(void) :
-    m_id(-1),
     m_origin(nullptr),
     m_target(nullptr),
     m_left_face(nullptr),
@@ -33,12 +32,6 @@ SDEdge::~SDEdge(void)
 }
 
 
-
-unsigned int
-SDEdge::id(void) const
-{
-    return this->m_id;
-}
 
 SDVertex *
 SDEdge::origin(void) const
@@ -62,4 +55,30 @@ SDFace *
 SDEdge::right_face(void) const
 {
     return this->m_right_face;
+}
+
+
+
+void
+SDEdge::origin(SDVertex *origin)
+{
+    this->m_origin = origin;
+}
+
+void
+SDEdge::target(SDVertex *target)
+{
+    this->m_target = target;
+}
+
+void
+SDEdge::left_face(SDFace *left_face)
+{
+    this->m_left_face = left_face;
+}
+
+void
+SDEdge::right_face(SDFace *right_face)
+{
+    this->m_right_face = right_face;
 }
