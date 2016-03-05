@@ -95,13 +95,13 @@ void mymotion(int x, int y)
     if (xform_mode==XFORM_ROTATE)
     {
         x_angle += (x - press_x)/1000.0;
-        if (x_angle > 180) x_angle -= 360;
-        else if (x_angle <-180) x_angle += 360;
+        if (x_angle > 180) x_angle += 360;
+        else if (x_angle <-180) x_angle -= 360;
         press_x = x;
         
         y_angle += (y - press_y)/1000.0;
-        if (y_angle > 180) y_angle -= 360;
-        else if (y_angle <-180) y_angle += 360;
+        if (y_angle > 180) y_angle += 360;
+        else if (y_angle <-180) y_angle -= 360;
         press_y = y;
     }
     else if (xform_mode == XFORM_SCALE)
