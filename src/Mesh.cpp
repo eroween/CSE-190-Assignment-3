@@ -42,12 +42,16 @@ Mesh::~Mesh()
     glDeleteBuffers(1, &this->m_vertex_buffer_id);
 }
 
-
-
 void
 Mesh::translate(const glm::vec3 &position)
 {
     this->m_model = glm::translate(this->m_model, position);
+}
+
+void
+Mesh::reset()
+{
+    //this->model = glm::mat4(1.0f);
 }
 
 void

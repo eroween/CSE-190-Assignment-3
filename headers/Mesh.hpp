@@ -44,12 +44,17 @@ public:
     /// In this program, the mesh is considered as an instantiated object.
     ///
     void    translate(const glm::vec3 &position);
-
+    
     ///
-    /// \brief Rotate the mesh
+    /// \brief Clear the matrix stack
+    ///
+    void reset();
+    
+    ///
+    /// \brief Rotate the mesh on The X axis
     ///
     void    rotate(float degree, const glm::vec3 &angles);
-
+    
     ///
     /// \brief Scale the mesh.
     ///
