@@ -162,18 +162,22 @@ SDFace::subdivide(void)
     }
     else
     {
-        SDVertex *v1 = this->m_vertices[0]->child_or_create();
-        SDVertex *v2 = this->m_vertices[1]->child_or_create();
-        SDVertex *v3 = this->m_vertices[2]->child_or_create();
+        SDVertex *v1 = new SDVertex();
+        SDVertex *v2 = new SDVertex();
+        SDVertex *v3 = new SDVertex();
 
         SDFace *f1 = new SDFace(this->m_vertices[0], v1, v3);
         SDFace *f2 = new SDFace(v1, this->m_vertices[1], v2);
         SDFace *f3 = new SDFace(v2, this->m_vertices[2], v3);
         SDFace *f4 = new SDFace(v1, v2, v3);
 
-        v1->position(this->m_vertices[0]->position());
-        v2->position(this->m_vertices[1]->position());
-        v3->position(this->m_vertices[2]->position());
+        glm::vec3 v1_pos = this->m_vertices[0]->position() + 0.5f * (this->m_vertices[1]->position() - this->m_vertices[0]->position());
+        glm::vec3 v2_pos = this->m_vertices[1]->position() + 0.5f * (this->m_vertices[2]->position() - this->m_vertices[1]->position());
+        glm::vec3 v3_pos = this->m_vertices[2]->position() + 0.5f * (this->m_vertices[0]->position() - this->m_vertices[2]->position());
+
+        v1->position(v1_pos);
+        v2->position(v2_pos);
+        v3->position(v3_pos);
 
 /*        v1->position((this->m_vertices[0]->position() + this->m_vertices[1]->position()) / 2.0f);*/
         //v2->position((this->m_vertices[1]->position() + this->m_vertices[2]->position()) / 2.0f);

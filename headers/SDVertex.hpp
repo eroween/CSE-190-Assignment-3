@@ -74,12 +74,6 @@ class   SDVertex
         ///
         bool    boundary(void) const;
 
-        ///
-        /// \brief Return the child vertex.
-        ///
-        SDVertex    *child(void) const;
-        SDVertex    *child_or_create(void);
-
     public:
         ///
         /// \brief Change the id of the vertex by the one in parameter.
@@ -105,11 +99,6 @@ class   SDVertex
         /// \brief Change the value of the m_boundary field by the one in param.
         ///
         void    boundary(bool boundary);
-
-        ///
-        /// \brief Set the child vertex value to the one in parameter.
-        ///
-        void    child(SDVertex *child);
 
     private:
         ///
