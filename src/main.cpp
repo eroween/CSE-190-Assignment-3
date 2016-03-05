@@ -101,6 +101,7 @@ void keyHandler(unsigned char key, int x, int y)
     {
         case 's':
             mesh->subdivide();
+            glutPostRedisplay();
             break;
         case 'x':
             // move cube left by a small amount

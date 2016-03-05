@@ -37,8 +37,8 @@ SDDataStructure::SDDataStructure(
                 " triangulated mesh.");
     }
     this->build_connectivity(vertex_positions, indices);
-    this->initialise_faces();
-    this->initialise_vertices();
+    //this->initialise_faces();
+    //this->initialise_vertices();
 }
 
 SDDataStructure::~SDDataStructure(void)
