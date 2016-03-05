@@ -144,7 +144,6 @@ void keyHandler(unsigned char key, int x, int y)
             //collapse();
             glutPostRedisplay();
             break;
-
         default:
             break;
     }
