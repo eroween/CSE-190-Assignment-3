@@ -72,7 +72,7 @@ unsigned int
 SDDataStructure::data_size(void) const
 {
     if (this->m_subdivision_level > 0)
-        return this->m_faces.size() * 4 * this->m_subdivision_level * 3;
+        return this->m_faces.size() * std::pow(4, this->m_subdivision_level) * 3;
     return this->m_faces.size() * 3;
 }
 
