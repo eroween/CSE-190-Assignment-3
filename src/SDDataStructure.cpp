@@ -36,6 +36,10 @@ SDDataStructure::SDDataStructure(
         throw std::runtime_error("Number of indices doesn't match a"
                 " triangulated mesh.");
     }
+
+    std::cout << "number of indices : " << indices.size() << std::endl;
+    std::cout << "number of vertices : " << vertex_positions.size() << std::endl;
+
     this->build_connectivity(vertex_positions, indices);
     //this->initialise_faces();
     //this->initialise_vertices();

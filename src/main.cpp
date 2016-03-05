@@ -160,7 +160,11 @@ int main(int argc, char** argv)
     glutMotionFunc(mymotion);
     glewInit();
 
-    mesh = OFFLoader::load("./models/testpatch.off");
+    if (argc > 1)
+        mesh = OFFLoader::load(argv[1]);
+    else
+        mesh = OFFLoader::load("./models/testpatch.off");
+
     programObject = Setup_GLSL("./shaders/mesh_shader");
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Shows only the lines
     glutMainLoop();
