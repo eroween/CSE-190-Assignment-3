@@ -8,7 +8,12 @@
 #include <iostream>
 #include <fstream>
 
+#if defined __APPLE__
+#include <OpenGL/glu.h>
+#include <GLUT/glut.h>
+#else
 #include <GL/glut.h>
+#endif
 
 #include "OFFLoader.hpp"
 #include "Mesh.hpp"
@@ -160,11 +165,15 @@ int main(int argc, char** argv)
     glutMotionFunc(mymotion);
     glewInit();
 
+<<<<<<< HEAD
     if (argc > 1)
         mesh = OFFLoader::load(argv[1]);
     else
         mesh = OFFLoader::load("./models/testpatch.off");
 
+=======
+    mesh = OFFLoader::load("./models/cow.off");
+>>>>>>> 8b4b9b1000663cf43d578184d1d95b88cfa80915
     programObject = Setup_GLSL("./shaders/mesh_shader");
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Shows only the lines
     glutMainLoop();
