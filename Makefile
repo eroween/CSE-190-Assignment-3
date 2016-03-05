@@ -18,7 +18,7 @@ NAME=	MeshEditor
 
 SRCS = src/main.cpp				\
 	   src/Mesh.cpp 			\
-	   src/HalfEdge.cpp			\
+	   src/OFFLoader.cpp 		\
 	   src/SDFace.cpp			\
 	   src/SDVertex.cpp			\
 	   src/SDDataStructure.cpp

@@ -43,20 +43,20 @@ class   SDDataStructure
 
     public:
         ///
-        /// \brief Return a vector of indices that can be used to represent the
-        ///     mesh with a graphic API.
+        /// \brief Computed vertices data with indices (drawArray).
         ///
-        /// WARNING : complexity O(N)
-        ///
-        std::vector<unsigned int>   indices(void) const;
+        std::vector<float>          data(void) const;
 
         ///
-        /// \brief Return a vecotr of vertices that can be used to represent the
-        ///     mesh with a graphic API.
+        /// \brief Return the number of vertices in the mesh datastructure.
         ///
-        /// WARNING : complexity O(N)
+        unsigned int    data_size(void) const;
+
+    public:
         ///
-        std::vector<glm::vec3>      vertices(void) const;
+        /// \brief Subdivide the mesh datastructure by one level.
+        ///
+        void    subdivide(void);
 
     private:
         ///
@@ -88,4 +88,9 @@ class   SDDataStructure
         /// \brief The list of vertices compositing the mesh.
         ///
         std::list<SDVertex *>   m_vertices;
+
+        ///
+        /// \brief Store the actual subdivision level.
+        ///
+        unsigned int            m_subdivision_level;
 };

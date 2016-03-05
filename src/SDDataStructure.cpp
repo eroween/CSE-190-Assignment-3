@@ -28,7 +28,8 @@ SDDataStructure::SDDataStructure(
         const std::vector<unsigned int> &indices,
         const std::vector<glm::vec3> &vertex_positions) :
     m_faces(),
-    m_vertices()
+    m_vertices(),
+    m_subdivision_level(0)
 {
     if (indices.size() % 3 != 0)
     {
@@ -54,34 +55,37 @@ SDDataStructure::~SDDataStructure(void)
 
 
 
-std::vector<unsigned int>
-SDDataStructure::indices(void) const
+std::vector<float>
+SDDataStructure::data(void) const
 {
-    std::vector<unsigned int>   indices;
+    std::vector<float>      data_vector;
 
-    indices.reserve(this->m_faces.size() * 3);
     for (SDFace *face : this->m_faces)
     {
-        auto vertices = face->vertices();
-        for (SDVertex *vertex : vertices)
-        {
-            indices.push_back(vertex->id());
-        }
+        const auto &face_data = face->data();
+        data_vector.insert(data_vector.end(), face_data.begin(), face_data.end());
     }
-    return indices;
+    return data_vector;
 }
 
-std::vector<glm::vec3>
-SDDataStructure::vertices(void) const
+unsigned int
+SDDataStructure::data_size(void) const
 {
-    std::vector<glm::vec3>  vertices;
+    if (this->m_subdivision_level > 0)
+        return this->m_faces.size() * 4 * this->m_subdivision_level * 3;
+    return this->m_faces.size() * 3;
+}
 
-    vertices.reserve(this->m_vertices.size());
-    for (SDVertex *vertex : this->m_vertices)
+
+
+void
+SDDataStructure::subdivide(void)
+{
+    ++this->m_subdivision_level;
+    for (SDFace *face : this->m_faces)
     {
-        vertices.push_back(vertex->position());
+        face->subdivide();
     }
-    return vertices;
 }
 
 

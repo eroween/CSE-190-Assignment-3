@@ -8,10 +8,10 @@
 #include <iostream>
 #include <fstream>
 
-#include "Mesh.hpp"
-#include "HalfEdge.hpp"
-#include "Vertex.hpp"
+#include <GL/glut.h>
 
+#include "OFFLoader.hpp"
+#include "Mesh.hpp"
 
 GLuint	vboHandle[1];	// a VBO that contains interleaved positions and colors
 GLuint programObject;
@@ -31,95 +31,35 @@ float y_angle = 0.0;
 float scale_size = 1;
 glm::vec3 translate;
 
-// Initialize the VBO
-void InitVBO()
-{
-    glGenBuffers(1, vboHandle);   // create an interleaved VBO object
-    glBindBuffer(GL_ARRAY_BUFFER, vboHandle[0]);   // bind the first handle
+glm::mat4 projection = glm::perspective(45.0f,1.0f,.1f,100.0f);
 
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Data)*(mesh->getNunOfVertices()), (GLdouble*)(mesh->getVertexData()), GL_STATIC_DRAW);
-
-    /**
-     * This chunk of code here is to prepare the index buffer -
-     * Not needed so far since I am using an Array buffer rather than vertex buffer
-     */
-    /*
-     glGenBuffers(1, &indexVBO);
-     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVBO);
-     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte)*(numOfVertices), tindices, GL_STATIC_DRAW);//!<  We moved the position
-     //!< and color data over to the graphics card. There will be no redundant data copy at drawing time */
-
-}
+glm::mat4 view = glm::lookAt(glm::vec3(0.0, 0.0, 15.0),
+        glm::vec3(0.0, 0.0, 0.0),
+        glm::vec3(0.0, -1.0, 0.0));
 
 // Display
 void display()
 {
-
-    glEnable(GL_DEPTH_TEST);    // need depth test to correctly draw 3D objects
+    glEnable(GL_DEPTH_TEST);
     glClearColor(0,0,0,1);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
     glUseProgram(programObject);
 
-
-    GLuint c0=glGetAttribLocation(programObject, "vertex_position");
-    GLuint c1=glGetAttribLocation(programObject, "vertex_color");
-    GLuint c2=glGetAttribLocation(programObject, "vertex_normal");
-
-    glVertexAttribPointer(c0,4,GL_DOUBLE, GL_FALSE, 12*sizeof(GLdouble),(GLvoid*)0);//(char*) NULL+0
-    glVertexAttribPointer(c1,4,GL_DOUBLE, GL_FALSE, 12*sizeof(GLdouble),(GLvoid*)(4*sizeof(GLdouble)));//(char*) NULL+16
-    glVertexAttribPointer(c2,4,GL_DOUBLE, GL_FALSE, 12*sizeof(GLdouble),(GLvoid*)(8*sizeof(GLdouble)));//(char*) NULL+24
-
-    glEnableVertexAttribArray(c0);
-    glEnableVertexAttribArray(c1);
-    glEnableVertexAttribArray(c2);
-    /**
-     * This chunk of code here is to prepare the index buffer -
-     * Not needed so far since I am using an Array buffer rather than vertex buffer
-     */
-    //glBindBuffer(GL_ARRAY_BUFFER, vboHandle[0]);
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVBO);
-    //Tells OpenGL how to walk through the VBOs, i.e., how the data are packed
-    //number of coordinates per vertex (4 here), type of the coordinates,
-    //stride between consecutive vertices, and pointers to the first coordinate
-
+    mesh->bind(programObject);
 
     GLint viewLoc = glGetUniformLocation(programObject, "view");
     GLint projLoc = glGetUniformLocation(programObject, "projection");
     GLint modelLoc = glGetUniformLocation(programObject, "model");
 
-    glm::mat4 projection = glm::perspective(45.0f,1.0f,.1f,100.0f);
-
-    /*
-
-    glm::mat4 view = glm::lookAt(glm::vec3(0.0, 20.0, 30.0),
-                                 glm::vec3(0.0, 0.0, 0.0),
-                                 glm::vec3(0.0, 5.0, .0));
-    */
-    glm::mat4 view = glm::lookAt(glm::vec3(0.0, 0.0, 15.0),
-                                 glm::vec3(0.0, 0.0, 0.0),
-                                 glm::vec3(0.0, -1.0, 0.0));
-
-    glm::mat4 model;
-    model = glm::mat4(1.0f);
-
-    model = glm::translate(model, translate);
-    //model = glm::mat4(1.0f);
-
-    model = glm::rotate(model, x_angle, glm::vec3(0.0f, 1.0f, 0.0f));
-    model = glm::rotate(model, y_angle, glm::vec3(1.0f, 0.0f, 0.0f));
-    model = glm::scale(model, glm::vec3(scale_size));
-
     // Pass the matrices to the shader
-    glUniformMatrix4fv(viewLoc, 1, GL_FALSE,  &view[0][0]);
-    glUniformMatrix4fv(projLoc, 1, GL_FALSE,&projection[0][0]);
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &model[0][0]);
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE,  glm::value_ptr(view));
+    glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(mesh->model()));
 
-    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    //glDrawElements(GL_TRIANGLES, numOfVertices, GL_UNSIGNED_BYTE, (char*) NULL+0);
-    glDrawArrays(GL_TRIANGLES, 0, mesh->getNunOfVertices());
+    std::cout << mesh->data_size() << std::endl;
 
-
+    glDrawArrays(GL_TRIANGLES, 0, mesh->data_size());
 
     glutSwapBuffers();
 }
@@ -140,14 +80,9 @@ void mymotion(int x, int y)
 {
     if (xform_mode==XFORM_ROTATE)
     {
-        x_angle += (x - press_x)/10.0;
-        if (x_angle > 180) x_angle -= 360;
-        else if (x_angle <-180) x_angle += 360;
+        mesh->rotate((y - press_y) / -50.0, glm::vec3(1.0, 0.0, 0.0));
+        mesh->rotate((x - press_x) / -50.0, glm::vec3(0.0, 1.0, 0.0));
         press_x = x;
-
-        y_angle += (y - press_y)/10.0;
-        if (y_angle > 180) y_angle -= 360;
-        else if (y_angle <-180) y_angle += 360;
         press_y = y;
     }
     else if (xform_mode == XFORM_SCALE)
@@ -164,6 +99,9 @@ void keyHandler(unsigned char key, int x, int y)
 {
     switch (key)
     {
+        case 's':
+            mesh->subdivide();
+            break;
         case 'x':
             // move cube left by a small amount
             translate.x = translate.x - 1.0;
@@ -198,7 +136,6 @@ void keyHandler(unsigned char key, int x, int y)
         case 't':
             //mesh->collapseMesh();
             //collapse();
-            InitVBO();
             glutPostRedisplay();
             break;
 
@@ -215,18 +152,16 @@ int main(int argc, char** argv)
     glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);
     glutInitWindowSize(600,600);
 
-    glutCreateWindow("shader cube");
+    glutCreateWindow("subdivsion-model");
     glutDisplayFunc(display);
     glutKeyboardFunc(keyHandler);
     glutMouseFunc(mymouse);
     glutMotionFunc(mymotion);
+    glewInit();
 
-    mesh = new Mesh("./models/testpatch.off");//testpatch.
-
-    programObject = Setup_GLSL("./shaders/mesh_shader");  //create shaders
-    /**< It tells OpenGl to draw the primitives as lines.*/
+    mesh = OFFLoader::load("./models/testpatch.off");
+    programObject = Setup_GLSL("./shaders/mesh_shader");
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Shows only the lines
-    InitVBO();
     glutMainLoop();
     return 0;
 }

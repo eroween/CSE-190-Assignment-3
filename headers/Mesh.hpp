@@ -1,151 +1,106 @@
 //
-//  Mesh.hpp
-//  Mesh_Editor_Xcode
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 3 of the License, or
+// any later version.
 //
-//  Created by Cristian Troncoso on 2/10/16.
-//  Copyright © 2016 Cristian Troncoso. All rights reserved.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with this program; If not, see <http://www.gnu.org/licenses/>.
+//
+// Copyright (C) 2016 Martin-Pierrat Louis (louismartinpierrat@gmail.com)
 //
 
-#ifndef Mesh_hpp
-#define Mesh_hpp
+#pragma once
 
-#if defined __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <GLUT/glut.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
-#endif
+#include    <vector>
+#include    <glm/glm.hpp>
 
-#include <stdio.h>
-#include <map>
-#include <iostream>
-#include <vector>
-#include <glm/glm.hpp>
-#include <stack>
+#include    "SDDataStructure.hpp"
 
-#include "Face.hpp"
-
-#define DEBUG 3
-#if defined(DEBUG) && DEBUG > 0
-#define DEBUG_PRINT(fmt, args...) fprintf(stderr, "DEBUG: %s:%d:%s(): " fmt, \
-__FILE__, __LINE__, __func__, ##args)
-#else
-#define printf //
-#define DEBUG_PRINT(fmt, args...) /* Don't do anything in release builds */
-#endif
-
-
-/*!
- * \brief   : Mesh class
- */
 class Mesh
 {
-
-
-protected:
-    Vertex *vertices;                   /**< Stores "all" model's vertices */
-
-    Data* outputData;                   /**< Raw data from all vertices, with interleaving location, color and normal */
-
-    int numOfVertices;                  /**< Total number of vertices after face parsing (ouput number of vertices) */
-
-    int numOfInputVertices;             /**< Num of vertices on input file */
-    int numOFinputFaces;                /**< Num of faces on input file */
-
-    std::vector<Face*> inputFaces;      /**< Contains original vertices from input file */
-    std::vector<Vertex*> inputVertex;   /**< Contains original faces from input file */
-
-
-
-    typedef std::pair<int,int> EMK;     /**< Make a short name for the edge map's key, based on start and end vertex */
-
-    typedef HalfEdge * EMV;             /**< Make a short name for the type stored at each edge, the edge map's value */
-
-    typedef std::map<EMK,EMV> EdgeMap;  /**< Make a short name for the edge map */
-
-    EdgeMap edge_map;
-
-
 public:
 
-    std::vector<HalfEdge*> hEdgeBuffer; /**< It stores all half edges data structures */
+    ///
+    /// \brief Default Constructor.
+    ///
+    Mesh(const std::vector<unsigned int> &indices,
+            const std::vector<glm::vec3> &vertex_positions);
 
-    /*!
-     * \brief   Mesh constructor.
-     */
-    Mesh(std::string filename);
-    /*!
-     * \brief   Mesh Destructor.
-     */
+    ///
+    /// \brief Destructor.
+    ///
     ~Mesh(void);
-    /*!
-     * \brief   Loads input file and parse it. It generates inputFaces and InputVertex.
-     * \param   Path to the input file
-     */
-    void loadObject(const std::string filename);
-    /*!
-     * \brief   It traverses the inputFace and inputVertex vectors to generate all model's vertices
-     */
-    void initMesh();
-    /*!
-     * \brief   It generates a buffer with all vertex information, color, normals and what not.
-     *          It uses the faces values (x,y,z) as a vertex id.
-     */
-    void createVertexBuffer();
 
-    /*!
-     * \brief   TODO - Draw is not implemented.
-     */
-    void draw();
-    /*!
-     * \brief   I gets the raw data buffer. The buffer that is loaded onto the gpu
-     *          with interleaving position, color and normal.
-     * \return  Data buffer.
-     */
-    double* getVertexData();
-    /*!
-     * \brief   Returns the total number of vertices in the model.
-     * \Return  Number of vertices in model.
-     */
-    int getNunOfVertices();
-    /*!
-     * \brief   It connects all halfedges adjacent to any given face
-     */
-    void buildHalfEdgeConnections(HalfEdge *e0, HalfEdge *e1, HalfEdge *e2);
-    /*!
-     * \brief   Split lines from input file for parsing purposes.
-     *          http://stackoverflow.com/questions/236129/split-a-string-in-c
-     */
-    std::vector<std::string>& split(const std::string &s, char delim, std::vector<std::string> &elems);
-    /*!
-     * \brief   Find all faces around a vertex, all faces touching a vertex
-     */
-    std::vector<Face*> findFacesAroundVertex(Vertex *v);
-    /*!
-     * \brief   Find all edges that are entering a vertex v.
-     */
-    std::vector<HalfEdge*> findEdgesEnteringVertex(Vertex *vi);
-    /*!
-     * \brief   Find all edges leaving a vertex v.
-     */
-    std::vector<HalfEdge*> findEdgesLeavingVertex(Vertex *vo);
-    /*!
-     * \brief   Find all faces around a faces, normally 3 faces, less than 3 means it's a boundary face
-     */
-    std::vector<Face*> findFacesAroundFace(Face *f);
-    /*!
-     * \brief   It populates the Data objec in each vertex, based on the face information
-     *          collected from file plus normal and color assigned to each face.
-     */
-    void createData(int i, Face *f);
-    /*!
-     * \brief   Debugging
-     * \TODO    move this to test.hpp
-     */
-    void test();
+public:
+    ///
+    /// \brief Move the mesh at a specific position.
+    ///
+    /// In this program, the mesh is considered as an instantiated object.
+    ///
+    void    translate(const glm::vec3 &position);
+
+    ///
+    /// \brief Rotate the mesh
+    ///
+    void    rotate(float degree, const glm::vec3 &angles);
+
+    ///
+    /// \brief Scale the mesh.
+    ///
+    void    scale(const glm::vec3 &scale);
+
+public:
+    ///
+    /// \brief Bind the mesh in the graphic pipeline.
+    ///
+    void    bind(unsigned int program_shader_id);
+
+    ///
+    /// \brief Subdivide the mesh by one level.
+    ///
+    void    subdivide(void);
+
+public:
+    ///
+    /// \brief Return the model matrix.
+    ///
+    const glm::mat4 &model(void) const;
+
+    ///
+    /// \brief The data size of the mesh.
+    ///
+    unsigned int    data_size(void) const;
+
+private:
+    ///
+    /// \brief Update the mesh in the graphic card.
+    ///
+    void    update(void);
+
+private:
+    ///
+    /// \brief The mesh datastructure used by the mesh to contains its data.
+    ///
+    SDDataStructure     m_datastructure;
+
+    ///
+    /// \brief The model matrix of the object.
+    ///
+    glm::mat4           m_model;
+
+    ///
+    /// \brief OpenGL specific, the vertex buffer id of the mesh.
+    ///
+    unsigned int        m_vertex_buffer_id;
+
+    ///
+    /// \brief OpenGL specific, the element buffer id of the mesh.
+    ///
+    unsigned int        m_element_buffer_id;
 };
-
-#endif /* Mesh_hpp */

@@ -125,6 +125,19 @@ SDVertex::boundary(void) const
     return this->m_boundary;
 }
 
+SDVertex *
+SDVertex::child(void) const
+{
+    return this->m_child_vertex;
+}
+
+SDVertex *
+SDVertex::child_or_create(void)
+{
+    if (this->m_child_vertex == nullptr)
+        this->m_child_vertex = new SDVertex();
+    return this->m_child_vertex;
+}
 
 
 void
@@ -155,4 +168,10 @@ void
 SDVertex::position(const glm::vec3 &position)
 {
     this->m_position = position;
+}
+
+void
+SDVertex::child(SDVertex *child)
+{
+    this->m_child_vertex = child;
 }

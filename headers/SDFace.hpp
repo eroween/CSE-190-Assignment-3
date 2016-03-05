@@ -17,6 +17,7 @@
 
 #pragma once
 
+#include    <glm/glm.hpp>
 #include    <vector>
 
 class   SDVertex;
@@ -30,9 +31,20 @@ class   SDFace
         SDFace(void);
 
         ///
+        /// \brief Construct a face directly with its 3 vertex.
+        ///
+        SDFace(SDVertex *v1, SDVertex *v2, SDVertex *v3);
+
+        ///
         /// \brief Destructor.
         ///
         ~SDFace(void);
+
+    public:
+        ///
+        /// \brief Subdivide the face into 4 sub-face.
+        ///
+        void    subdivide(void);
 
     public:
 
@@ -55,6 +67,21 @@ class   SDFace
         ///
         const std::vector<SDFace *>     &childrens_faces(void) const;
 
+        ///
+        /// \brief Compute the data to draw the face and return it.
+        ///
+        std::vector<float> data(void) const;
+
+        ///
+        /// \brief Return the color of the face.
+        ///
+        const glm::vec3 &color(void) const;
+
+        ///
+        /// \brief Return the normal of the face.
+        ///
+        const glm::vec3 &normal(void) const;
+
     public:
         ///
         /// \brief Change the value of the vertex at the index "index" by the
@@ -68,6 +95,16 @@ class   SDFace
         void    adjacent_face(unsigned int index, SDFace *face);
 
     private:
+        ///
+        /// \brief The color of the face.
+        ///
+        glm::vec3   m_color;
+
+        ///
+        /// \brief The normal of the face.
+        ///
+        glm::vec3   m_normal;
+
         ///
         /// \brief The vector of vertices
         ///
