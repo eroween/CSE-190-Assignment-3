@@ -26,6 +26,7 @@ SDFace::SDFace(void) :
     m_color_tmp(m_color),
     m_normal(0.0f),
     m_vertices(3, nullptr),
+    m_vertices_child(3, nullptr),
     m_adjacent_faces(3, nullptr),
     m_childrens_faces(4, nullptr)
 {
@@ -37,6 +38,7 @@ SDFace::SDFace(SDVertex *v1, SDVertex *v2, SDVertex *v3) :
     m_color_tmp(m_color),
     m_normal(0.0f),
     m_vertices(3, nullptr),
+    m_vertices_child(3, nullptr),
     m_adjacent_faces(3, nullptr),
     m_childrens_faces(4, nullptr)
 {
@@ -203,30 +205,64 @@ SDFace::subdivide(void)
     }
     else
     {
-        SDVertex *v1 = new SDVertex();
-        SDVertex *v2 = new SDVertex();
-        SDVertex *v3 = new SDVertex();
-
-        SDFace *f1 = new SDFace(this->m_vertices[0], v1, v3);
-        SDFace *f2 = new SDFace(v1, this->m_vertices[1], v2);
-        SDFace *f3 = new SDFace(v2, this->m_vertices[2], v3);
-        SDFace *f4 = new SDFace(v1, v2, v3);
-
-        glm::vec3 v1_pos = this->m_vertices[0]->position() + 0.5f * (this->m_vertices[1]->position() - this->m_vertices[0]->position());
-        glm::vec3 v2_pos = this->m_vertices[1]->position() + 0.5f * (this->m_vertices[2]->position() - this->m_vertices[1]->position());
-        glm::vec3 v3_pos = this->m_vertices[2]->position() + 0.5f * (this->m_vertices[0]->position() - this->m_vertices[2]->position());
-
-        v1->position(v1_pos);
-        v2->position(v2_pos);
-        v3->position(v3_pos);
-
-/*        v1->position((this->m_vertices[0]->position() + this->m_vertices[1]->position()) / 2.0f);*/
-        //v2->position((this->m_vertices[1]->position() + this->m_vertices[2]->position()) / 2.0f);
-        //v3->position((this->m_vertices[2]->position() + this->m_vertices[0]->position()) / 2.0f);
-
-        this->m_childrens_faces[0] = f1;
-        this->m_childrens_faces[1] = f2;
-        this->m_childrens_faces[2] = f3;
-        this->m_childrens_faces[3] = f4;
+        this->generate_child_vertices();
+        this->generate_child_faces();
     }
+}
+
+void
+SDFace::generate_child_vertices(void)
+{
+    // The v0 && v1 are only used to set the position in the middle of the two
+    // vertex. I think that should be removed with a proper implementation of the
+    // new position.
+    auto generate_child_vertex = [this](unsigned int index,
+            SDVertex *v0, SDVertex *v1){
+        if (this->m_vertices_child[index] == nullptr)
+        {
+            SDVertex *vertex = new SDVertex();
+
+            // SET THE POSITION OF THE 3 EVEN VERTEX.
+            vertex->position(v0->position() + 0.5f * (v1->position() - v0->position()));
+
+            this->m_vertices_child[index] = vertex;
+            if (this->m_adjacent_faces[index] != nullptr)
+            {
+                this->m_adjacent_faces[index]->update_child_vertex(this, vertex);
+            }
+        }
+    };
+    generate_child_vertex(0, this->m_vertices[0], this->m_vertices[1]);
+    generate_child_vertex(1, this->m_vertices[1], this->m_vertices[2]);
+    generate_child_vertex(2, this->m_vertices[2], this->m_vertices[0]);
+    this->m_vertices[0]->generate_child_vertex();
+    this->m_vertices[1]->generate_child_vertex();
+    this->m_vertices[2]->generate_child_vertex();
+}
+
+void
+SDFace::generate_child_faces(void)
+{
+    auto generate_child_face = [this](unsigned int index, SDVertex *v1,
+            SDVertex *v2, SDVertex *v3){
+        SDFace *face = new SDFace(v1, v2, v3);
+        v1->face(face);
+        v2->face(face);
+        v3->face(face);
+        this->m_childrens_faces[index] = face;
+    };
+    generate_child_face(0, this->m_vertices[0]->child(), this->m_vertices_child[0], this->m_vertices_child[2]);
+    generate_child_face(1, this->m_vertices_child[0], this->m_vertices[1]->child(), this->m_vertices_child[1]);
+    generate_child_face(2, this->m_vertices_child[1], this->m_vertices[2]->child(), this->m_vertices_child[2]);
+    generate_child_face(3, this->m_vertices_child[0], this->m_vertices_child[1], this->m_vertices_child[2]);
+}
+
+void
+SDFace::update_child_vertex(SDFace *face, SDVertex *vertex)
+{
+    unsigned int    position;
+
+    for (position = 0 ; position < 3 && this->m_adjacent_faces[position] != face
+            ; ++position);
+    this->m_vertices_child[position] = vertex;
 }

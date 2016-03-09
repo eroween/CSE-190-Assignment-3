@@ -47,6 +47,12 @@ class   SDVertex
         void    initialise(void);
 
         ///
+        /// \brief If the child vertex is not already generated, generate a new
+        ///     child vertex.
+        ///
+        void    generate_child_vertex(void);
+
+        ///
         /// \brief Return the valence of the vertex.
         ///
         unsigned int    valence(void) const;
@@ -66,6 +72,11 @@ class   SDVertex
         /// \brief Return the face of the vertex.
         ///
         SDFace  *face(void) const;
+
+        ///
+        /// \brief Return the child vertex.
+        ///
+        SDVertex *child(void) const;
 
         ///
         /// \brief Return true if the vertex is a regular vertex, false
@@ -128,14 +139,14 @@ class   SDVertex
         glm::vec3   m_position;
 
         ///
-        /// \brief The child vertex, the child vertex is the right child vertex.
-        ///
-        SDVertex    *m_child_vertex;
-
-        ///
         /// \brief A pointer to one face using the vertex.
         ///
         SDFace  *m_face;
+
+        ///
+        /// \brief The child vertex (in the next LOD).
+        ///
+        SDVertex    *m_child_vertex;
 
         ///
         /// \brief Contains the state of the vertex for the regular or not

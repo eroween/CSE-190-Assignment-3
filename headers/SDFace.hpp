@@ -101,6 +101,24 @@ class   SDFace
 
     private:
         ///
+        /// \brief Generate the three child vertice and share them with adjacent
+        ///     faces.
+        ///
+        void    generate_child_vertices(void);
+
+        ///
+        /// \brief Generate the four child faces.
+        ///
+        void    generate_child_faces(void);
+
+        ///
+        /// \brief Update the shared vertex with the 'face' with the value of
+        ///     'vertex'.
+        ///
+        void    update_child_vertex(SDFace *face, SDVertex *vertex);
+
+    private:
+        ///
         /// \brief The color of the face.
         ///
         glm::vec3   m_color;
@@ -118,6 +136,14 @@ class   SDFace
         /// triangle face.
         ///
         std::vector<SDVertex *>     m_vertices;
+
+        ///
+        /// \brief The vector of child vertices.
+        ///
+        /// The size of the vector is always 3, because we only support triangle
+        /// face
+        ///
+        std::vector<SDVertex *>     m_vertices_child;
 
         ///
         /// \brief The vector of adjacent faces.

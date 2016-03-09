@@ -15,13 +15,15 @@
 // Copyright (C) 2016 Martin-Pierrat Louis (louismartinpierrat@gmail.com)
 //
 
+#include    <iostream>
+
 #include    "SDVertex.hpp"
 #include    "SDFace.hpp"
 
 SDVertex::SDVertex(void) :
     m_position(0.0f),
-    m_child_vertex(nullptr),
     m_face(nullptr),
+    m_child_vertex(nullptr),
     m_regular(false),
     m_boundary(false)
 {
@@ -38,6 +40,8 @@ void
 SDVertex::select(void)
 {
     SDFace  *face = this->m_face;
+
+    std::cout << "valence value : " << this->valence() << std::endl;
 
     do
     {
@@ -82,17 +86,29 @@ SDVertex::initialise(void)
 {
     SDFace  *face = this->m_face;
 
+    if (face == nullptr) return;
     do
     {
         face = face->left_adjacent_face(this);
     } while (face != nullptr && face != this->face());
     this->m_boundary = (face == nullptr);
 
-/*    if ((this->boundary() && this->valence() == 6) ||*/
-            //(!this->boundary() && this->valence() == 4))
-    //{
-        //this->m_regular = true;
-    /*}*/
+    if ((this->boundary() && this->valence() == 6) ||
+            (!this->boundary() && this->valence() == 4))
+    {
+        this->m_regular = true;
+    }
+}
+
+void
+SDVertex::generate_child_vertex(void)
+{
+    if (this->m_child_vertex == nullptr)
+    {
+        SDVertex *child = new SDVertex();
+        child->m_position = this->m_position;
+        this->m_child_vertex = child;
+    }
 }
 
 unsigned int
@@ -155,6 +171,12 @@ SDFace *
 SDVertex::face(void) const
 {
     return this->m_face;
+}
+
+SDVertex *
+SDVertex::child(void) const
+{
+    return this->m_child_vertex;
 }
 
 bool

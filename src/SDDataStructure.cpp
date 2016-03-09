@@ -98,9 +98,7 @@ SDDataStructure::debug(int val)
 
         std::advance(nit, vertice_num);
         (*nit)->select();
-
     }
-
 }
 
 
@@ -178,6 +176,17 @@ SDDataStructure::build_connectivity(
         }
         this->m_faces.push_back(face);
     }
+    for (auto it = this->m_vertices.begin() ; it != this->m_vertices.end() ; )
+    {
+        if ((*it)->face() == nullptr)
+        {
+            it = this->m_vertices.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
 
 void
@@ -199,6 +208,7 @@ SDDataStructure::initialise_faces(void)
             {
                 (*it).second.first->adjacent_face((*it).second.second, face);
                 face->adjacent_face(index, (*it).second.first);
+                edges.erase(it);
             }
             else
             {
