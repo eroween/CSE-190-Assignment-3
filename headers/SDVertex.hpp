@@ -59,11 +59,6 @@ class   SDVertex
 
     public:
         ///
-        /// \brief Return the id of the vertex.
-        ///
-        unsigned int    id(void) const;
-
-        ///
         /// \brief Return the position of the vertex.
         ///
         const glm::vec3     &position(void) const;
@@ -91,11 +86,6 @@ class   SDVertex
         bool    boundary(void) const;
 
     public:
-        ///
-        /// \brief Change the id of the vertex by the one in parameter.
-        ///
-        void    id(unsigned int id);
-
         ///
         /// \brief Change the vertex position to a new position.
         ///
@@ -128,11 +118,6 @@ class   SDVertex
         unsigned int    boundary_valence(void) const;
 
     private:
-        ///
-        /// \brief The id of the vertex.
-        ///
-        unsigned int    m_id;
-
         ///
         /// \brief The position value of the vertex.
         ///

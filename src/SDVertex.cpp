@@ -107,6 +107,8 @@ SDVertex::generate_child_vertex(void)
     {
         SDVertex *child = new SDVertex();
         child->m_position = this->m_position;
+        child->m_boundary = this->m_boundary;
+        child->m_regular = this->m_regular;
         this->m_child_vertex = child;
     }
 }
@@ -155,12 +157,6 @@ SDVertex::boundary_valence(void) const
 
 
 
-unsigned int
-SDVertex::id(void) const
-{
-    return this->m_id;
-}
-
 const glm::vec3 &
 SDVertex::position(void) const
 {
@@ -192,11 +188,6 @@ SDVertex::boundary(void) const
 }
 
 
-void
-SDVertex::id(unsigned int id)
-{
-    this->m_id = id;
-}
 
 void
 SDVertex::face(SDFace *face)

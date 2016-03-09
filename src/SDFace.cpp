@@ -54,6 +54,43 @@ SDFace::~SDFace(void)
 
 
 void
+SDFace::initialise(std::map<SDEdge, std::pair<SDFace *, unsigned int>> &edges)
+{
+    if (this->m_childrens_faces[0] != nullptr)
+    {
+        for (SDFace *child : this->m_childrens_faces)
+        {
+             child->initialise(edges);
+        }
+    }
+    else
+    {
+        std::map<SDEdge, std::pair<SDFace *, unsigned int>>::iterator it;
+
+        auto face_vertices = this->vertices();
+        for (unsigned int index = 0 ; index < 3 ; ++index)
+        {
+            auto edge = std::make_pair(face_vertices[index],
+                    face_vertices[(index + 1) % 3]);
+            if (edge.first > edge.second)
+                std::swap(edge.first, edge.second);
+            if ((it = edges.find(edge)) != edges.end())
+            {
+                (*it).second.first->adjacent_face((*it).second.second, this);
+                this->adjacent_face(index, (*it).second.first);
+                edges.erase(it);
+            }
+            else
+            {
+                auto value = std::make_pair(this, index);
+                edges.insert(std::make_pair(edge, value));
+            }
+        }
+    }
+
+}
+
+void
 SDFace::select(bool with_children, const glm::vec3 &color)
 {
     this->m_color = color;
@@ -221,9 +258,18 @@ SDFace::generate_child_vertices(void)
         if (this->m_vertices_child[index] == nullptr)
         {
             SDVertex *vertex = new SDVertex();
+            vertex->regular(true);
+            vertex->boundary(this->m_adjacent_faces[index] == nullptr);
 
-            // SET THE POSITION OF THE 3 EVEN VERTEX.
-            vertex->position(v0->position() + 0.5f * (v1->position() - v0->position()));
+            // SET THE POSITION FOR ODD VERTEX.
+            if (vertex->boundary())
+            {
+                vertex->position(v0->position() + 0.5f * (v1->position() - v0->position()));
+            }
+            else
+            {
+                vertex->position(v0->position() + 0.5f * (v1->position() - v0->position()));
+            }
 
             this->m_vertices_child[index] = vertex;
             if (this->m_adjacent_faces[index] != nullptr)

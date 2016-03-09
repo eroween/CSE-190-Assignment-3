@@ -133,6 +133,7 @@ SDDataStructure::subdivide(void)
     {
         face->subdivide();
     }
+    this->initialise_faces();
 }
 
 
@@ -150,8 +151,6 @@ SDDataStructure::build_connectivity(
     {
         // get the preallocated vertex in order to initialize it.
         SDVertex    *vertex = new SDVertex();
-        // set the id of the vertex.
-        vertex->id(vertex_index);
         // translate the allocated vertex to its position.
         vertex->position(vertex_positions[vertex_index]);
         // add the vertex in the list of vertex known by the datastructure.
@@ -193,29 +192,10 @@ void
 SDDataStructure::initialise_faces(void)
 {
     std::map<SDEdge, std::pair<SDFace *, unsigned int>>   edges;
-    std::map<SDEdge, std::pair<SDFace *, unsigned int>>::iterator it;
 
     for (SDFace *face : this->m_faces)
     {
-        auto face_vertices = face->vertices();
-        for (unsigned int index = 0 ; index < 3 ; ++index)
-        {
-            auto edge = std::make_pair(face_vertices[index],
-                    face_vertices[(index + 1) % 3]);
-            if (edge.first->id() > edge.second->id())
-                std::swap(edge.first, edge.second);
-            if ((it = edges.find(edge)) != edges.end())
-            {
-                (*it).second.first->adjacent_face((*it).second.second, face);
-                face->adjacent_face(index, (*it).second.first);
-                edges.erase(it);
-            }
-            else
-            {
-                auto value = std::make_pair(face, index);
-                edges.insert(std::make_pair(edge, value));
-            }
-        }
+        face->initialise(edges);
     }
 }
 

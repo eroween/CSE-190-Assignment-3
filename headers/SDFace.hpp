@@ -17,6 +17,7 @@
 
 #pragma once
 
+#include    <map>
 #include    <glm/glm.hpp>
 #include    <vector>
 
@@ -46,6 +47,12 @@ class   SDFace
         void    unselect(bool);
 
     public:
+        ///
+        /// \brief Initiase the adjacent face ptr.
+        ///
+        using SDEdge = std::pair<SDVertex *, SDVertex *>;
+        void    initialise(std::map<SDEdge, std::pair<SDFace *, unsigned int>> &edges);
+
         ///
         /// \brief Subdivide the face into 4 sub-face.
         ///
@@ -122,6 +129,8 @@ class   SDFace
         /// \brief The color of the face.
         ///
         glm::vec3   m_color;
+        // store the original value of the face in order to reset the color to
+        //  the original one. [debug]
         glm::vec3   m_color_tmp;
 
         ///
