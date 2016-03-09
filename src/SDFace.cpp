@@ -23,6 +23,7 @@
 
 SDFace::SDFace(void) :
     m_color(glm::linearRand(glm::vec3(0.0f), glm::vec3(1.0f))),
+    m_color_tmp(m_color),
     m_normal(0.0f),
     m_vertices(3, nullptr),
     m_adjacent_faces(3, nullptr),
@@ -33,6 +34,7 @@ SDFace::SDFace(void) :
 
 SDFace::SDFace(SDVertex *v1, SDVertex *v2, SDVertex *v3) :
     m_color(glm::linearRand(glm::vec3(0.0f), glm::vec3(1.0f))),
+    m_color_tmp(m_color),
     m_normal(0.0f),
     m_vertices(3, nullptr),
     m_adjacent_faces(3, nullptr),
@@ -49,6 +51,39 @@ SDFace::~SDFace(void)
 }
 
 
+void
+SDFace::select(void)
+{
+    this->m_color = glm::vec3(1.0f, 0.0f, 0.0f);
+
+    auto f1 = this->m_adjacent_faces[0];
+    auto f2 = this->m_adjacent_faces[1];
+    auto f3 = this->m_adjacent_faces[2];
+
+    if (f1 != nullptr)
+        f1->m_color = glm::vec3(1.0f, 0.5f, 0.5f);
+    if (f2 != nullptr)
+        f2->m_color = glm::vec3(1.0f, 0.5f, 0.5f);
+    if (f3 != nullptr)
+        f3->m_color = glm::vec3(1.0f, 0.5f, 0.5f);
+}
+
+void
+SDFace::unselect(void)
+{
+    this->m_color = this->m_color_tmp;
+
+    auto f1 = this->m_adjacent_faces[0];
+    auto f2 = this->m_adjacent_faces[1];
+    auto f3 = this->m_adjacent_faces[2];
+
+    if (f1 != nullptr)
+        f1->m_color = f1->m_color_tmp;
+    if (f2 != nullptr)
+        f2->m_color = f2->m_color_tmp;
+    if (f3 != nullptr)
+        f3->m_color = f3->m_color_tmp;
+}
 
 const std::vector<SDVertex *> &
 SDFace::vertices(void) const

@@ -49,7 +49,6 @@ glm::mat4 view = glm::lookAt(glm::vec3(0.0, 20.0, 30.0),
 // Display
 void display()
 {
-    
     glEnable(GL_DEPTH_TEST);
     glClearColor(0,0,0,1);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -61,7 +60,6 @@ void display()
     GLint viewLoc = glGetUniformLocation(programObject, "view");
     GLint projLoc = glGetUniformLocation(programObject, "projection");
     GLint modelLoc = glGetUniformLocation(programObject, "model");
-    
 
     mesh->rotate(x_angle, glm::vec3(0.0f, 1.0f, 0.0f));
     mesh->rotate(y_angle, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -70,8 +68,6 @@ void display()
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE,  glm::value_ptr(view));
     glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(mesh->model()));
-
-    std::cout << mesh->data_size() << std::endl;
 
     glDrawArrays(GL_TRIANGLES, 0, mesh->data_size());
 
@@ -98,7 +94,7 @@ void mymotion(int x, int y)
         if (x_angle > 180) x_angle += 360;
         else if (x_angle <-180) x_angle -= 360;
         press_x = x;
-        
+
         y_angle += (y - press_y)/1000.0;
         if (y_angle > 180) y_angle += 360;
         else if (y_angle <-180) y_angle -= 360;
@@ -111,7 +107,7 @@ void mymotion(int x, int y)
         if (scale_size <0) scale_size = old_size;
         press_y = y;
     }
-    
+
     glutPostRedisplay();
 }
 
@@ -168,6 +164,14 @@ void keyHandler(unsigned char key, int x, int y)
             break;
         case 'r':
             mesh->reset();
+            break;
+        case '+':
+            mesh->debug(0);
+            glutPostRedisplay();
+            break;
+        case '-':
+            mesh->debug(1);
+            glutPostRedisplay();
             break;
         default:
             break;

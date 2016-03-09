@@ -42,6 +42,10 @@ class   SDDataStructure
         ~SDDataStructure(void);
 
     public:
+
+        void    debug(int);
+
+    public:
         ///
         /// \brief Computed vertices data with indices (drawArray).
         ///

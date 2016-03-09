@@ -41,6 +41,11 @@ class   SDFace
         ~SDFace(void);
 
     public:
+
+        void    select(void);
+        void    unselect(void);
+
+    public:
         ///
         /// \brief Subdivide the face into 4 sub-face.
         ///
@@ -99,6 +104,7 @@ class   SDFace
         /// \brief The color of the face.
         ///
         glm::vec3   m_color;
+        glm::vec3   m_color_tmp;
 
         ///
         /// \brief The normal of the face.

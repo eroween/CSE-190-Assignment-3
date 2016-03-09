@@ -41,7 +41,7 @@ SDDataStructure::SDDataStructure(
     std::cout << "number of vertices : " << vertex_positions.size() << std::endl;
 
     this->build_connectivity(vertex_positions, indices);
-    //this->initialise_faces();
+    this->initialise_faces();
     //this->initialise_vertices();
 }
 
@@ -57,6 +57,26 @@ SDDataStructure::~SDDataStructure(void)
     }
 }
 
+
+void
+SDDataStructure::debug(int val)
+{
+    static int  face_num = 0;
+
+    auto it = this->m_faces.begin();
+    std::advance(it, face_num);
+
+    (*it)->unselect();
+
+    face_num = val == 1 ? face_num - 1 : face_num + 1;
+    face_num = face_num < 0 ? this->m_faces.size() - 1 : face_num > (int)this->m_faces.size() - 1 ? 0 : face_num;
+
+    auto nit = this->m_faces.begin();
+
+    std::advance(nit, face_num);
+    (*nit)->select();
+
+}
 
 
 std::vector<float>

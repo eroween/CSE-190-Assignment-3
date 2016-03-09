@@ -38,23 +38,27 @@ public:
     ~Mesh(void);
 
 public:
+
+    void    debug(int);
+
+public:
     ///
     /// \brief Move the mesh at a specific position.
     ///
     /// In this program, the mesh is considered as an instantiated object.
     ///
     void    translate(const glm::vec3 &position);
-    
+
     ///
     /// \brief Clear the matrix stack
     ///
     void reset();
-    
+
     ///
     /// \brief Rotate the mesh on The X axis
     ///
     void    rotate(float degree, const glm::vec3 &angles);
-    
+
     ///
     /// \brief Scale the mesh.
     ///

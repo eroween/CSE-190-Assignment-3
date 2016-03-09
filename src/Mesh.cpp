@@ -42,6 +42,16 @@ Mesh::~Mesh()
     glDeleteBuffers(1, &this->m_vertex_buffer_id);
 }
 
+
+
+void
+Mesh::debug(int val)
+{
+    this->m_datastructure.debug(val);
+    this->update();
+}
+
+
 void
 Mesh::translate(const glm::vec3 &position)
 {
@@ -114,7 +124,6 @@ void
 Mesh::update(void)
 {
     const auto &buffer_data = this->m_datastructure.data();
-    std::cout << buffer_data.size() << std::endl;
     glBindBuffer(GL_ARRAY_BUFFER, this->m_vertex_buffer_id);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * buffer_data.size(),
             buffer_data.data(), GL_DYNAMIC_DRAW);

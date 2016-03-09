@@ -61,9 +61,9 @@ OFFLoader::load(const std::string &path)
         }
         if (tokens.size() == 4)
         {
-            indices.push_back(std::stoi(tokens.at(1))+1);
-            indices.push_back(std::stoi(tokens.at(2))+1);
-            indices.push_back(std::stoi(tokens.at(3))+1);
+            indices.push_back(std::stoi(tokens.at(1))/*+1*/);
+            indices.push_back(std::stoi(tokens.at(2))/*+1*/);
+            indices.push_back(std::stoi(tokens.at(3))/*+1*/);
         }
     }
     return new Mesh(indices, vertex_positions);
