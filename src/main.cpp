@@ -173,7 +173,15 @@ void keyHandler(unsigned char key, int x, int y)
             mesh->debug(1);
             glutPostRedisplay();
             break;
-        default:
+        case '1':
+            mesh->debug(2);
+            glutPostRedisplay();
+            break;
+       case '2':
+            mesh->debug(3);
+            glutPostRedisplay();
+            break;
+      default:
             break;
     }
 }

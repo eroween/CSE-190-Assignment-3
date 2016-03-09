@@ -52,37 +52,43 @@ SDFace::~SDFace(void)
 
 
 void
-SDFace::select(void)
+SDFace::select(bool with_children, const glm::vec3 &color)
 {
-    this->m_color = glm::vec3(1.0f, 0.0f, 0.0f);
+    this->m_color = color;
 
-    auto f1 = this->m_adjacent_faces[0];
-    auto f2 = this->m_adjacent_faces[1];
-    auto f3 = this->m_adjacent_faces[2];
+    if (with_children)
+    {
+        auto f1 = this->m_adjacent_faces[0];
+        auto f2 = this->m_adjacent_faces[1];
+        auto f3 = this->m_adjacent_faces[2];
 
-    if (f1 != nullptr)
-        f1->m_color = glm::vec3(1.0f, 0.5f, 0.5f);
-    if (f2 != nullptr)
-        f2->m_color = glm::vec3(1.0f, 0.5f, 0.5f);
-    if (f3 != nullptr)
-        f3->m_color = glm::vec3(1.0f, 0.5f, 0.5f);
+        if (f1 != nullptr)
+            f1->m_color = glm::vec3(1.0f, 0.5f, 0.5f);
+        if (f2 != nullptr)
+            f2->m_color = glm::vec3(1.0f, 0.5f, 0.5f);
+        if (f3 != nullptr)
+            f3->m_color = glm::vec3(1.0f, 0.5f, 0.5f);
+    }
 }
 
 void
-SDFace::unselect(void)
+SDFace::unselect(bool with_children)
 {
     this->m_color = this->m_color_tmp;
 
-    auto f1 = this->m_adjacent_faces[0];
-    auto f2 = this->m_adjacent_faces[1];
-    auto f3 = this->m_adjacent_faces[2];
+    if (with_children)
+    {
+        auto f1 = this->m_adjacent_faces[0];
+        auto f2 = this->m_adjacent_faces[1];
+        auto f3 = this->m_adjacent_faces[2];
 
-    if (f1 != nullptr)
-        f1->m_color = f1->m_color_tmp;
-    if (f2 != nullptr)
-        f2->m_color = f2->m_color_tmp;
-    if (f3 != nullptr)
-        f3->m_color = f3->m_color_tmp;
+        if (f1 != nullptr)
+            f1->m_color = f1->m_color_tmp;
+        if (f2 != nullptr)
+            f2->m_color = f2->m_color_tmp;
+        if (f3 != nullptr)
+            f3->m_color = f3->m_color_tmp;
+    }
 }
 
 const std::vector<SDVertex *> &

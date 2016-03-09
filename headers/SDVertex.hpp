@@ -35,6 +35,11 @@ class   SDVertex
         ~SDVertex(void);
 
     public:
+
+        void    select(void);
+        void    unselect(void);
+
+    public:
         ///
         /// \brief Initialise the vertex, (set the boundary and regular
         ///     attribute).

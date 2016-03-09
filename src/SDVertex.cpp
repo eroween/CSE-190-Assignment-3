@@ -35,6 +35,49 @@ SDVertex::~SDVertex(void)
 
 
 void
+SDVertex::select(void)
+{
+    SDFace  *face = this->m_face;
+
+    do
+    {
+        if (this->boundary())
+            face->select(false, glm::vec3(0.0f, 0.0f, 1.0f));
+        else
+            face->select(false);
+        face = face->left_adjacent_face(this);
+    } while (face != nullptr && face != this->face());
+    face = this->m_face;
+    do
+    {
+        if (this->boundary())
+            face->select(false, glm::vec3(0.0f, 0.0f, 1.0f));
+        else
+            face->select(false);
+        face = face->right_adjacent_face(this);
+    } while (face != nullptr && face != this->face());
+}
+
+void
+SDVertex::unselect(void)
+{
+    SDFace  *face = this->m_face;
+
+    do
+    {
+        face->unselect(false);
+        face = face->left_adjacent_face(this);
+    } while (face != nullptr && face != this->face());
+    face = this->m_face;
+    do
+    {
+        face->unselect(false);
+        face = face->right_adjacent_face(this);
+    } while (face != nullptr && face != this->face());
+}
+
+
+void
 SDVertex::initialise(void)
 {
     SDFace  *face = this->m_face;
@@ -44,11 +87,12 @@ SDVertex::initialise(void)
         face = face->left_adjacent_face(this);
     } while (face != nullptr && face != this->face());
     this->m_boundary = (face == nullptr);
-    if ((this->boundary() && this->valence() == 6) ||
-            (!this->boundary() && this->valence() == 4))
-    {
-        this->m_regular = true;
-    }
+
+/*    if ((this->boundary() && this->valence() == 6) ||*/
+            //(!this->boundary() && this->valence() == 4))
+    //{
+        //this->m_regular = true;
+    /*}*/
 }
 
 unsigned int

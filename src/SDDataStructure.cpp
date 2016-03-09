@@ -42,7 +42,7 @@ SDDataStructure::SDDataStructure(
 
     this->build_connectivity(vertex_positions, indices);
     this->initialise_faces();
-    //this->initialise_vertices();
+    this->initialise_vertices();
 }
 
 SDDataStructure::~SDDataStructure(void)
@@ -61,20 +61,45 @@ SDDataStructure::~SDDataStructure(void)
 void
 SDDataStructure::debug(int val)
 {
-    static int  face_num = 0;
+    if (val == 0 || val == 1)
+    {
+        static int  face_num = 0;
 
-    auto it = this->m_faces.begin();
-    std::advance(it, face_num);
+        auto it = this->m_faces.begin();
+        std::advance(it, face_num);
 
-    (*it)->unselect();
+        (*it)->unselect(true);
 
-    face_num = val == 1 ? face_num - 1 : face_num + 1;
-    face_num = face_num < 0 ? this->m_faces.size() - 1 : face_num > (int)this->m_faces.size() - 1 ? 0 : face_num;
+        if (val == 0)
+        {
+            face_num = face_num + 1;
+            face_num = face_num > (int)this->m_faces.size() - 1 ? 0 : face_num;
 
-    auto nit = this->m_faces.begin();
+            auto nit = this->m_faces.begin();
 
-    std::advance(nit, face_num);
-    (*nit)->select();
+            std::advance(nit, face_num);
+            (*nit)->select(true);
+        }
+    }
+    else if (val == 2 || val == 3)
+    {
+        static int  vertice_num = 0;
+
+        auto it = this->m_vertices.begin();
+        std::advance(it, vertice_num);
+
+        (*it)->unselect();
+
+        vertice_num = val == 1 ? vertice_num - 1 : vertice_num + 1;
+        vertice_num = vertice_num < 0 ? this->m_vertices.size() - 1 :
+            vertice_num > (int)this->m_vertices.size() - 1 ? 0 : vertice_num;
+
+        auto nit = this->m_vertices.begin();
+
+        std::advance(nit, vertice_num);
+        (*nit)->select();
+
+    }
 
 }
 
