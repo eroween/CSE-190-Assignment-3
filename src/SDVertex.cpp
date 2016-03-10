@@ -15,6 +15,7 @@
 // Copyright (C) 2016 Martin-Pierrat Louis (louismartinpierrat@gmail.com)
 //
 
+#include    <algorithm>
 #include    <iostream>
 
 #include    "SDVertex.hpp"
@@ -155,7 +156,68 @@ SDVertex::boundary_valence(void) const
     return valence;
 }
 
+std::vector<SDVertex *>
+SDVertex::adjacent_vertices(void) const
+{
+    std::vector<SDVertex *>     result;
+    auto faces = this->adjacent_faces();
 
+    for (SDFace *face : faces)
+    {
+        auto face_vertices = face->vertices();
+        for (SDVertex *vertex : face_vertices)
+        {
+            if (vertex != this && std::find(result.begin(), result.end(), vertex) == result.end())
+            {
+                result.push_back(vertex);
+            }
+        }
+    }
+    return result;
+}
+
+std::vector<SDFace *>
+SDVertex::adjacent_faces(void) const
+{
+    if (this->boundary())
+        return this->boundary_adjacent_faces();
+    return this->non_boundary_adjacent_faces();
+}
+
+std::vector<SDFace *>
+SDVertex::boundary_adjacent_faces(void) const
+{
+    std::vector<SDFace *>   result;
+    SDFace *face = this->m_face;
+
+    do
+    {
+        result.push_back(face);
+        face = face->left_adjacent_face(this);
+    } while (face != nullptr && face != this->m_face);
+    face = this->face();
+    face = face->right_adjacent_face(this);
+    while (face != nullptr && face != this->m_face)
+    {
+        result.push_back(face);
+        face = face->right_adjacent_face(this);
+    }
+    return result;
+}
+
+std::vector<SDFace *>
+SDVertex::non_boundary_adjacent_faces(void) const
+{
+    std::vector<SDFace *>   result;
+    SDFace *face = this->m_face;
+
+    do
+    {
+        result.push_back(face);
+        face = face->left_adjacent_face(this);
+    } while (face != nullptr && face != this->m_face);
+    return result;
+}
 
 const glm::vec3 &
 SDVertex::position(void) const

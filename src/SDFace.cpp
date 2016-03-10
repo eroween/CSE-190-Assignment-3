@@ -93,40 +93,70 @@ SDFace::initialise(std::map<SDEdge, std::pair<SDFace *, unsigned int>> &edges)
 void
 SDFace::select(bool with_children, const glm::vec3 &color)
 {
-    this->m_color = color;
-
-    if (with_children)
+    if (this->m_childrens_faces[0] != nullptr)
     {
-        auto f1 = this->m_adjacent_faces[0];
-        auto f2 = this->m_adjacent_faces[1];
-        auto f3 = this->m_adjacent_faces[2];
+        this->m_childrens_faces[0]->select(true);
+        this->m_childrens_faces[1]->select(true);
+        this->m_childrens_faces[2]->select(true);
+        this->m_childrens_faces[3]->select(true);
 
-        if (f1 != nullptr)
-            f1->m_color = glm::vec3(1.0f, 0.5f, 0.5f);
-        if (f2 != nullptr)
-            f2->m_color = glm::vec3(1.0f, 0.5f, 0.5f);
-        if (f3 != nullptr)
-            f3->m_color = glm::vec3(1.0f, 0.5f, 0.5f);
+        this->m_childrens_faces[0]->select(false);
+        this->m_childrens_faces[1]->select(false);
+        this->m_childrens_faces[2]->select(false);
+        this->m_childrens_faces[3]->select(false);
+    }
+    else
+    {
+        this->m_color = color;
+
+        if (with_children)
+        {
+            auto f1 = this->m_adjacent_faces[0];
+            auto f2 = this->m_adjacent_faces[1];
+            auto f3 = this->m_adjacent_faces[2];
+
+            if (f1 != nullptr)
+                f1->m_color = glm::vec3(1.0f, 0.5f, 0.5f);
+            if (f2 != nullptr)
+                f2->m_color = glm::vec3(1.0f, 0.5f, 0.5f);
+            if (f3 != nullptr)
+                f3->m_color = glm::vec3(1.0f, 0.5f, 0.5f);
+        }
     }
 }
 
 void
 SDFace::unselect(bool with_children)
 {
-    this->m_color = this->m_color_tmp;
-
-    if (with_children)
+    if (this->m_childrens_faces[0] != nullptr)
     {
-        auto f1 = this->m_adjacent_faces[0];
-        auto f2 = this->m_adjacent_faces[1];
-        auto f3 = this->m_adjacent_faces[2];
+        this->m_childrens_faces[0]->unselect(true);
+        this->m_childrens_faces[1]->unselect(true);
+        this->m_childrens_faces[2]->unselect(true);
+        this->m_childrens_faces[3]->unselect(true);
 
-        if (f1 != nullptr)
-            f1->m_color = f1->m_color_tmp;
-        if (f2 != nullptr)
-            f2->m_color = f2->m_color_tmp;
-        if (f3 != nullptr)
-            f3->m_color = f3->m_color_tmp;
+        this->m_childrens_faces[0]->unselect(false);
+        this->m_childrens_faces[1]->unselect(false);
+        this->m_childrens_faces[2]->unselect(false);
+        this->m_childrens_faces[3]->unselect(false);
+    }
+    else
+    {
+        this->m_color = this->m_color_tmp;
+
+        if (with_children)
+        {
+            auto f1 = this->m_adjacent_faces[0];
+            auto f2 = this->m_adjacent_faces[1];
+            auto f3 = this->m_adjacent_faces[2];
+
+            if (f1 != nullptr)
+                f1->m_color = f1->m_color_tmp;
+            if (f2 != nullptr)
+                f2->m_color = f2->m_color_tmp;
+            if (f3 != nullptr)
+                f3->m_color = f3->m_color_tmp;
+        }
     }
 }
 
@@ -261,15 +291,7 @@ SDFace::generate_child_vertices(void)
             vertex->regular(true);
             vertex->boundary(this->m_adjacent_faces[index] == nullptr);
 
-            // SET THE POSITION FOR ODD VERTEX.
-            if (vertex->boundary())
-            {
-                vertex->position(v0->position() + 0.5f * (v1->position() - v0->position()));
-            }
-            else
-            {
-                vertex->position(v0->position() + 0.5f * (v1->position() - v0->position()));
-            }
+            vertex->position(v0->position() + 0.5f * (v1->position() - v0->position()));
 
             this->m_vertices_child[index] = vertex;
             if (this->m_adjacent_faces[index] != nullptr)

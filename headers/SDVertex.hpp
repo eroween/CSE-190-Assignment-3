@@ -17,6 +17,7 @@
 
 #pragma once
 
+#include    <vector>
 #include    <glm/glm.hpp>
 
 class   SDFace;
@@ -56,6 +57,18 @@ class   SDVertex
         /// \brief Return the valence of the vertex.
         ///
         unsigned int    valence(void) const;
+
+        ///
+        /// \brief Return a vector of adjacent vertices.
+        ///
+        std::vector<SDVertex *>     adjacent_vertices(void) const;
+
+        ///
+        /// \brief Return a vector of adjacent faces.
+        ///
+        std::vector<SDFace *>       adjacent_faces(void) const;
+        std::vector<SDFace *>       boundary_adjacent_faces(void) const;
+        std::vector<SDFace *>       non_boundary_adjacent_faces(void) const;
 
     public:
         ///
