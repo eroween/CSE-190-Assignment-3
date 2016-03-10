@@ -98,6 +98,7 @@ SDDataStructure::debug(int val)
 
         std::advance(nit, vertice_num);
         (*nit)->select();
+
     }
 }
 
